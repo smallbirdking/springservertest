@@ -3,7 +3,7 @@ package com.example.demo.Service.ServiceImpl;
 import com.example.demo.Service.ImageService;
 import com.example.demo.dao.ImageDao;
 import com.example.demo.entity.Image;
-import com.example.demo.entity.ImageUpd;
+import com.example.demo.entity.ImageData;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
@@ -16,15 +16,22 @@ public class ImageServiceImpl implements ImageService {
 
     @Override
     public Image findOne() {
-        Image one = imageDao.findOne();
+        return imageDao.findOne();
+    }
 
-//        ImageUpd imageUpd = new ImageUpd();
-//        imageUpd.setContent(one.getContent().getData());
-        return one;
+    @Override
+    public ImageData findAll(int id){
+        ImageData all = imageDao.findAll();
+        return all;
     }
 
     @Override
     public void save(Image file) {
         imageDao.saveImage(file);
+    }
+
+    @Override
+    public void saveMultipImages(List<Image> files) {
+        imageDao.saveMultipImages(files);
     }
 }

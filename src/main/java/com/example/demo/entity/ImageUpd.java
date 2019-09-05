@@ -1,16 +1,14 @@
 package com.example.demo.entity;
 
-import org.bson.types.Binary;
-
 public class ImageUpd {
 
-    private byte[] content; // 文件内容
+    private String content; // 文件内容
 
-    public byte[] getContent() {
+    public String getContent() {
         return content;
     }
 
-    public void setContent(byte[] content) {
+    public void setContent(String content) {
         this.content = content;
     }
 }
