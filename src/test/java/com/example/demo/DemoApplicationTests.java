@@ -28,7 +28,7 @@ public class DemoApplicationTests {
     public void TestFindByName(){
         List<User> users = userDao.findAll();
         System.out.println("size: "+users.size());
-        System.out.println("user1: "+users.get(0).getName());
+        //System.out.println("user1: "+users.get(0).getName());
     }
 
 

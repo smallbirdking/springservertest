@@ -2,7 +2,6 @@ package com.example.demo.dao.daoImpl;
 
 import com.example.demo.dao.TextDao;
 import com.example.demo.entity.Text;
-import com.example.demo.entity.User;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.mongodb.core.MongoTemplate;
 import org.springframework.stereotype.Repository;
