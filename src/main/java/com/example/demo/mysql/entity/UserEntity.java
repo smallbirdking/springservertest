@@ -4,7 +4,7 @@ import javax.persistence.*;
 import java.sql.Timestamp;
 
 @Entity
-@Table(name = "User", schema = "HeatWave")
+@Table(name = "User", schema = "HeatWave", catalog = "")
 public class UserEntity {
     private long id;
     private String userName;
@@ -12,6 +12,7 @@ public class UserEntity {
     private String createdBy;
     private Timestamp createdTime;
     private Timestamp updatedTime;
+    private int status;
 
     @Id
     @Column(name = "ID")
@@ -73,6 +74,16 @@ public class UserEntity {
         this.updatedTime = updatedTime;
     }
 
+    @Basic
+    @Column(name = "STATUS")
+    public int getStatus() {
+        return status;
+    }
+
+    public void setStatus(int status) {
+        this.status = status;
+    }
+
     @Override
     public boolean equals(Object o) {
         if (this == o) return true;
@@ -81,6 +92,7 @@ public class UserEntity {
         UserEntity that = (UserEntity) o;
 
         if (id != that.id) return false;
+        if (status != that.status) return false;
         if (userName != null ? !userName.equals(that.userName) : that.userName != null) return false;
         if (userPassword != null ? !userPassword.equals(that.userPassword) : that.userPassword != null) return false;
         if (createdBy != null ? !createdBy.equals(that.createdBy) : that.createdBy != null) return false;
@@ -98,6 +110,7 @@ public class UserEntity {
         result = 31 * result + (createdBy != null ? createdBy.hashCode() : 0);
         result = 31 * result + (createdTime != null ? createdTime.hashCode() : 0);
         result = 31 * result + (updatedTime != null ? updatedTime.hashCode() : 0);
+        result = 31 * result + status;
         return result;
     }
 }

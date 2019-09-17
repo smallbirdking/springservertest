@@ -7,6 +7,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
+import java.util.Optional;
 
 @Service("userEntityService")
 public class UserEntityServiceImpl implements UserEntityService {
@@ -23,4 +24,16 @@ public class UserEntityServiceImpl implements UserEntityService {
     public List<UserEntity> findByUserName(String userName) {
         return userEntityRepository.findByUserName(userName);
     }
+
+    @Override
+    public Optional<UserEntity> findByUserId(Long id) {
+        return userEntityRepository.findById(id);
+    }
+
+    @Override
+    public Optional<UserEntity> insertUser(UserEntity userEntity) {
+        UserEntity user = userEntityRepository.save(userEntity);
+        return Optional.of(user);
+    }
+
 }
