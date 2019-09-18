@@ -5,6 +5,7 @@ import com.example.demo.mysql.repository.UserEntityRepository;
 import com.example.demo.mysql.service.UserEntityService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 
 import java.util.List;
 import java.util.Optional;
@@ -31,9 +32,15 @@ public class UserEntityServiceImpl implements UserEntityService {
     }
 
     @Override
+    @Transactional
     public Optional<UserEntity> insertUser(UserEntity userEntity) {
         UserEntity user = userEntityRepository.save(userEntity);
         return Optional.of(user);
+    }
+
+    @Override
+    public int deleteByUsername(String username) {
+        return userEntityRepository.deleteByUsername(username);
     }
 
 }

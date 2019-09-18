@@ -1,5 +1,9 @@
 package com.example.demo.mysql.entity;
 
+import org.springframework.data.annotation.CreatedDate;
+import org.springframework.data.annotation.LastModifiedDate;
+import org.springframework.format.annotation.DateTimeFormat;
+
 import javax.persistence.*;
 import java.sql.Timestamp;
 
@@ -55,6 +59,8 @@ public class UserEntity {
     }
 
     @Basic
+    @CreatedDate
+    @DateTimeFormat(pattern = "yyyy-MM-dd HH:mm:ss")
     @Column(name = "CREATED_TIME")
     public Timestamp getCreatedTime() {
         return createdTime;
@@ -65,6 +71,7 @@ public class UserEntity {
     }
 
     @Basic
+    @LastModifiedDate
     @Column(name = "UPDATED_TIME")
     public Timestamp getUpdatedTime() {
         return updatedTime;

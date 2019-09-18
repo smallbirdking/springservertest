@@ -6,11 +6,15 @@ import com.example.demo.mysql.repository.UserEntityRepository;
 import com.example.demo.mysql.repository.UserProfileEntityRepository;
 import com.example.demo.mysql.service.UserProfileEntityService;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 
 import java.util.Collections;
 import java.util.List;
 import java.util.Optional;
+import java.util.stream.Stream;
 
 @Service("userProfileEntityService")
 public class UserProfileEntityServiceImpl implements UserProfileEntityService {
@@ -21,17 +25,26 @@ public class UserProfileEntityServiceImpl implements UserProfileEntityService {
     private UserEntityRepository userEntityRepository;
 
     @Override
-    public List<UserProfileEntity> findByUserID(Long id) {
-        Optional<UserEntity> userEntity = userEntityRepository.findById(id);
-        if (userEntity.isPresent()){
-            return userProfileEntityRepository.findByUserID(userEntity.get());
-        }
-        return Collections.emptyList();
+    public List<UserProfileEntity> findByUserEntity(UserEntity userEntity) {
+        return userProfileEntityRepository.findByUserID(userEntity);
     }
 
     @Override
+    @Transactional
     public Optional<UserProfileEntity> insertUserProfile(UserProfileEntity userProfileEntity) {
         UserProfileEntity userProfile = userProfileEntityRepository.save(userProfileEntity);
         return Optional.of(userProfile);
+    }
+
+    @Override
+    public Stream<UserProfileEntity> findByUserID(Long userId) {
+        Stream<UserProfileEntity> userProfiles = userProfileEntityRepository.findByUserID(userId);
+        return userProfiles;
+    }
+
+    @Override
+    public Page<UserProfileEntity> findByFirstName(String firstName, Pageable sort) {
+        Page<UserProfileEntity> userProfiles = userProfileEntityRepository.findByFirstName(firstName, sort);
+        return userProfiles;
     }
 }

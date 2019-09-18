@@ -14,4 +14,6 @@ public interface UserEntityService {
     Optional<UserEntity> findByUserId(Long id);
 
     Optional<UserEntity> insertUser(UserEntity userEntity);
+
+    int deleteByUsername(String username);
 }
