@@ -13,8 +13,7 @@ public class UserEntityController {
     @Autowired
     private UserEntityService userEntityService;
 
-    @GetMapping(value = "/oo")
-//    @ResponseBody
+    @GetMapping(value = "/find_all_user")
     public List<UserEntity> findAllUsers(){
         List<UserEntity> list= userEntityService.findAll();
         return list;

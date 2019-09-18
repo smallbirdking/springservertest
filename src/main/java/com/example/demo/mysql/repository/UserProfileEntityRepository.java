@@ -11,7 +11,6 @@ import org.springframework.stereotype.Repository;
 import org.springframework.transaction.annotation.Transactional;
 
 import java.util.List;
-import java.util.stream.Stream;
 
 @Repository
 public interface UserProfileEntityRepository extends CrudRepository<UserProfileEntity, Long> {
@@ -19,11 +18,11 @@ public interface UserProfileEntityRepository extends CrudRepository<UserProfileE
     @Query("select u from UserProfileEntity u where u.userByUserId = ?1")
     List<UserProfileEntity> findByUserID(UserEntity userEntity);
 
-    @Query(value = "select u from User_Profile u where u.USER_ID = ?1", nativeQuery = true)
-    Stream<UserProfileEntity> findByUserID(long id);
+    @Query(value = "select * from User_Profile where USER_ID = ?1", nativeQuery = true)
+    List<UserProfileEntity> findByUserID(long id);
 
-    @Query(value = "select u from #{#entityName} u where u.firstName = :firstname",
-            countQuery = "select count(u) from #{#entityName} u where u.firstName = :firstname")
+    @Query(value = "select u from UserProfileEntity u where u.firstName = :firstname",
+            countQuery = "select count(u) from UserProfileEntity u where u.firstName = :firstname")
     @Transactional(timeout = 10)
     Page<UserProfileEntity> findByFirstName(@Param("firstname") String firstName, Pageable sort);
 

@@ -1,10 +1,16 @@
 package com.example.demo.mysql.entity;
 
+import org.springframework.data.annotation.LastModifiedDate;
+import org.springframework.data.jpa.domain.support.AuditingEntityListener;
+import org.springframework.format.annotation.DateTimeFormat;
+
 import javax.persistence.*;
 import java.sql.Date;
+import java.sql.Timestamp;
 
 @Entity
-@Table(name = "User_Profile", schema = "HeatWave")
+@EntityListeners(AuditingEntityListener.class)
+@Table(name = "User_Profile", schema = "HeatWave", catalog = "")
 public class UserProfileEntity {
     private long id;
     private String firstName;
@@ -17,6 +23,7 @@ public class UserProfileEntity {
     private Integer userLevel;
     private Integer sex;
     private UserEntity userByUserId;
+    private Timestamp updatedTime;
 
     @Id
     @Column(name = "ID")
@@ -162,5 +169,17 @@ public class UserProfileEntity {
 
     public void setUserByUserId(UserEntity userByUserId) {
         this.userByUserId = userByUserId;
+    }
+
+    @Basic
+    @LastModifiedDate
+    @DateTimeFormat(pattern = "yyyy-MM-dd HH:mm:ss")
+    @Column(name = "UPDATED_TIME")
+    public Timestamp getUpdatedTime() {
+        return updatedTime;
+    }
+
+    public void setUpdatedTime(Timestamp updatedTime) {
+        this.updatedTime = updatedTime;
     }
 }

@@ -11,7 +11,6 @@ import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
-import java.util.Collections;
 import java.util.List;
 import java.util.Optional;
 import java.util.stream.Stream;
@@ -37,9 +36,10 @@ public class UserProfileEntityServiceImpl implements UserProfileEntityService {
     }
 
     @Override
+    @Transactional
     public Stream<UserProfileEntity> findByUserID(Long userId) {
-        Stream<UserProfileEntity> userProfiles = userProfileEntityRepository.findByUserID(userId);
-        return userProfiles;
+        List<UserProfileEntity> userProfiles = userProfileEntityRepository.findByUserID(userId);
+        return userProfiles.stream();
     }
 
     @Override

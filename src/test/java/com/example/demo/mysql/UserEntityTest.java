@@ -1,11 +1,9 @@
 package com.example.demo.mysql;
 
-import java.sql.Timestamp;
-import java.util.Date;
-import java.util.List;
-import java.util.Optional;
-import java.util.stream.Stream;
-
+import com.example.demo.mysql.entity.UserEntity;
+import com.example.demo.mysql.entity.UserProfileEntity;
+import com.example.demo.mysql.service.UserEntityService;
+import com.example.demo.mysql.service.UserProfileEntityService;
 import org.junit.Test;
 import org.junit.runner.RunWith;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -15,10 +13,11 @@ import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Sort;
 import org.springframework.test.context.junit4.SpringRunner;
 
-import com.example.demo.mysql.entity.UserEntity;
-import com.example.demo.mysql.entity.UserProfileEntity;
-import com.example.demo.mysql.service.UserEntityService;
-import com.example.demo.mysql.service.UserProfileEntityService;
+import java.sql.Timestamp;
+import java.util.Date;
+import java.util.List;
+import java.util.Optional;
+import java.util.stream.Stream;
 
 @RunWith(SpringRunner.class)
 @SpringBootTest
@@ -66,9 +65,9 @@ public class UserEntityTest {
     Timestamp time2 = new Timestamp(new Date().getTime());
 
     UserEntity userEntity = new UserEntity();
-    userEntity.setUserName("sbk1");
+    userEntity.setUserName("sbk0");
     userEntity.setUserPassword("123");
-    userEntity.setCreatedTime(time2);
+//    userEntity.setCreatedTime(time2);
     Optional<UserEntity> userEntityRs = userEntityService.insertUser(userEntity);
 
     printUser(userEntityRs.get());
@@ -98,7 +97,7 @@ public class UserEntityTest {
   @Test
   public void testFindByFirstName() {
     Page<UserProfileEntity> userProfileEntity = userProfileEntityService.findByFirstName("YU",
-        new PageRequest(0, 5, Sort.Direction.ASC, "username"));
+        new PageRequest(0, 5, Sort.Direction.ASC, "nickName"));
     System.out.println(userProfileEntity);
   }
 

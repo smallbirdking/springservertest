@@ -15,7 +15,7 @@ public interface UserEntityRepository extends CrudRepository<UserEntity,Integer>
     @Query(value = "select u from UserEntity u where u.userName like %?1")
     List<UserEntity> findByUserName(String userName);
 
-    @Query(value = "select u from UserEntity u where u.id = ?1", nativeQuery = true)
+    @Query(value = "select * from User where ID = ?1 limit 1", nativeQuery = true)
     Optional<UserEntity> findById(Long id);
 
     @Transactional()

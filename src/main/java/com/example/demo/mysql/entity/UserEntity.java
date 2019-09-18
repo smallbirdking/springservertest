@@ -2,12 +2,14 @@ package com.example.demo.mysql.entity;
 
 import org.springframework.data.annotation.CreatedDate;
 import org.springframework.data.annotation.LastModifiedDate;
+import org.springframework.data.jpa.domain.support.AuditingEntityListener;
 import org.springframework.format.annotation.DateTimeFormat;
 
 import javax.persistence.*;
 import java.sql.Timestamp;
 
 @Entity
+@EntityListeners(AuditingEntityListener.class)
 @Table(name = "User", schema = "HeatWave", catalog = "")
 public class UserEntity {
     private long id;
@@ -72,6 +74,7 @@ public class UserEntity {
 
     @Basic
     @LastModifiedDate
+    @DateTimeFormat(pattern = "yyyy-MM-dd HH:mm:ss")
     @Column(name = "UPDATED_TIME")
     public Timestamp getUpdatedTime() {
         return updatedTime;
