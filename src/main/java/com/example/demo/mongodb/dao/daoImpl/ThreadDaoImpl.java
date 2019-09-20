@@ -4,6 +4,8 @@ import com.example.demo.mongodb.dao.ThreadDao;
 import com.example.demo.mongodb.entity.Thread;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.mongodb.core.MongoTemplate;
+import org.springframework.data.mongodb.core.query.Criteria;
+import org.springframework.data.mongodb.core.query.Query;
 import org.springframework.stereotype.Repository;
 
 import java.util.List;
@@ -17,7 +19,6 @@ public class ThreadDaoImpl implements ThreadDao {
     @Autowired
     private MongoTemplate mongoTemplate;
 
-
     @Override
     public void save(Thread thread) {
         mongoTemplate.save(thread);
@@ -25,6 +26,7 @@ public class ThreadDaoImpl implements ThreadDao {
 
     @Override
     public List<Thread> findByUserId(Long id) {
-        return mongoTemplate.findOne();
+        Query query = new Query(Criteria.where("CREATED_USER_ID").is(id));
+        return mongoTemplate.find(query, Thread.class, "Thread");
     }
 }

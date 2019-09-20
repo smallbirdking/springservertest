@@ -2,6 +2,7 @@ package com.example.demo.mongodb.entity;
 
 import org.springframework.data.annotation.Id;
 import org.springframework.data.mongodb.core.mapping.Document;
+import org.springframework.data.mongodb.core.mapping.Field;
 import org.springframework.stereotype.Repository;
 
 import java.util.Date;
@@ -14,26 +15,37 @@ public class Thread {
 
     /** ID */
     @Id
+    @Field("ID")
     private Long id ;
     /** 创建人 */
+    @Field("CREATED_USER_ID")
     private Long createdUserId ;
     /** 创建时间 */
+    @Field("CREATED_TIME")
     private Date createdTime ;
     /** 更新人 */
+    @Field("UPDATED_USER_ID")
     private Long updatedUserId ;
     /** 更新时间 */
+    @Field("UPDATED_TIME")
     private Date updatedTime ;
     /** 帖子标题 */
+    @Field("TR_SUBJECT")
     private String trSubject ;
     /** 帖子内容 */
+    @Field("TR_BODY")
     private String trBody ;
     /** 地点列表 */
+    @Field("LOCAL_LIST")
     private List localList ;
     /** 提醒 */
+    @Field("MENTIONED_USER_LIST")
     private List mentionedUserList ;
     /** 管理员列表 */
+    @Field("ADMIN_LIST")
     private List adminList ;
     /** 话题 */
+    @Field("TOPIC_LIST")
     private List topicList ;
 
     /** ID */

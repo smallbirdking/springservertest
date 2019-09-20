@@ -27,5 +27,6 @@ public interface UserProfileEntityRepository extends CrudRepository<UserProfileE
     Page<UserProfileEntity> findByFirstName(@Param("firstname") String firstName, Pageable sort);
 
 //    @Async
+//     (t.dbname like '%'||?1||'%' or ?1='')
 //    ListenableFuture<UserEntity> findOneByLastname(String lastname);
 }

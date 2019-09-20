@@ -15,11 +15,11 @@ public class ThreadServiceImpl implements ThreadService {
 
     @Override
     public void insertThread(Thread thread) {
-
+        threadDao.save(thread);
     }
 
     @Override
     public List<Thread> findByUserId(Long userId) {
-        return null;
+        return threadDao.findByUserId(userId);
     }
 }
