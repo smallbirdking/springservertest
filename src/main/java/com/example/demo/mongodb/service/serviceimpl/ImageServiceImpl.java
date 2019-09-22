@@ -1,9 +1,9 @@
 package com.example.demo.mongodb.service.serviceimpl;
 
-import com.example.demo.mongodb.service.ImageService;
 import com.example.demo.mongodb.dao.ImageDao;
 import com.example.demo.mongodb.entity.Image;
-import com.example.demo.mongodb.entity.ImageData;
+import com.example.demo.mongodb.entity.ImageListData;
+import com.example.demo.mongodb.service.ImageService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
@@ -20,8 +20,8 @@ public class ImageServiceImpl implements ImageService {
     }
 
     @Override
-    public ImageData findAll(int id){
-        ImageData all = imageDao.findAll();
+    public ImageListData findAll(int id){
+        ImageListData all = imageDao.findAll();
         return all;
     }
 

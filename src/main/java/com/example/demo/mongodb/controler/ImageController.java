@@ -1,8 +1,8 @@
 package com.example.demo.mongodb.controler;
 
-import com.example.demo.mongodb.service.ImageService;
 import com.example.demo.mongodb.entity.Image;
-import com.example.demo.mongodb.entity.ImageData;
+import com.example.demo.mongodb.entity.ImageListData;
+import com.example.demo.mongodb.service.ImageService;
 import org.bson.BsonBinarySubType;
 import org.bson.types.Binary;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -27,7 +27,7 @@ public class ImageController {
     }
 
     @RequestMapping("/find/all")
-    public ImageData findAll(int id) {
+    public ImageListData findAll(int id) {
         System.out.println(id);
         return imgService.findAll(id);
     }

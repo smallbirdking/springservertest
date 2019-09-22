@@ -1,8 +1,10 @@
 package com.example.demo.mongodb;
 
 
+import com.example.demo.mongodb.dao.ThreadDao;
 import com.example.demo.mongodb.dao.UserDao;
 import com.example.demo.mongodb.dao.UserProfileDao;
+import com.example.demo.mongodb.entity.Thread;
 import com.example.demo.mongodb.entity.User;
 import com.example.demo.mongodb.entity.UserProfile;
 import org.junit.Test;
@@ -26,6 +28,9 @@ public class InsertDataTest {
 
     @Autowired
     private UserProfileDao userProfileDao;
+
+    @Autowired
+    private ThreadDao threadDao;
 
     @Test
     public void testInsertUsers() {
@@ -62,6 +67,30 @@ public class InsertDataTest {
 
 
         }
+    }
+
+
+    @Test
+    public void testInsertThread() {
+        long userId = 1;
+        List<Long> admins = new ArrayList<>();
+        admins.add(userId);
+        Date createdTime = new Date();
+
+        Thread thread = new Thread();
+        thread.setAdminList(admins);
+        thread.setTrSubject("Test");
+        thread.setTrBody("tests");
+        thread.setCreatedUserId(userId);
+        thread.setCreatedTime(createdTime);
+        threadDao.save(thread);
+    }
+
+    @Test
+    public void getThreadByUserId() {
+        long userId = 1;
+        List<Thread> threads = threadDao.findByUserId(userId);
+        System.out.println(threads);
     }
 
 }

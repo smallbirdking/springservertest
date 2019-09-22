@@ -1,6 +1,6 @@
 package com.example.demo.mongodb.entity;
 
-import org.springframework.data.annotation.Id;
+import org.springframework.data.annotation.CreatedBy;
 import org.springframework.data.mongodb.core.mapping.Document;
 import org.springframework.data.mongodb.core.mapping.Field;
 import org.springframework.stereotype.Repository;
@@ -13,15 +13,12 @@ import java.util.List;
 @Repository
 public class Thread {
 
-    /** ID */
-    @Id
-    @Field("ID")
-    private Long id ;
     /** 创建人 */
     @Field("CREATED_USER_ID")
     private Long createdUserId ;
     /** 创建时间 */
     @Field("CREATED_TIME")
+    @CreatedBy
     private Date createdTime ;
     /** 更新人 */
     @Field("UPDATED_USER_ID")
@@ -48,14 +45,6 @@ public class Thread {
     @Field("TOPIC_LIST")
     private List topicList ;
 
-    /** ID */
-    public Long getId(){
-        return this.id;
-    }
-    /** ID */
-    public void setId(Long id){
-        this.id = id;
-    }
     /** 创建人 */
     public Long getCreatedUserId(){
         return this.createdUserId;
@@ -135,5 +124,21 @@ public class Thread {
     /** 话题 */
     public void setTopicList(List topicList){
         this.topicList = topicList;
+    }
+
+    @Override
+    public String toString() {
+        return "Thread{" +
+                "createdUserId=" + createdUserId +
+                ", createdTime=" + createdTime +
+                ", updatedUserId=" + updatedUserId +
+                ", updatedTime=" + updatedTime +
+                ", trSubject='" + trSubject + '\'' +
+                ", trBody='" + trBody + '\'' +
+                ", localList=" + localList +
+                ", mentionedUserList=" + mentionedUserList +
+                ", adminList=" + adminList +
+                ", topicList=" + topicList +
+                '}';
     }
 }

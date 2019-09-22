@@ -2,7 +2,7 @@ package com.example.demo.mongodb.dao.daoImpl;
 
 import com.example.demo.mongodb.dao.ImageDao;
 import com.example.demo.mongodb.entity.Image;
-import com.example.demo.mongodb.entity.ImageData;
+import com.example.demo.mongodb.entity.ImageListData;
 import com.example.demo.mongodb.entity.ImageUpd;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.mongodb.core.MongoTemplate;
@@ -34,7 +34,7 @@ public class ImageDaoImpl implements ImageDao {
     }
 
     @Override
-    public ImageData findAll() {
+    public ImageListData findAll() {
         Query query = new Query();
         List<Image> images = mongoTemplate.findAll(Image.class, "Image");
         List<ImageUpd> imageUpds = new ArrayList<>();
@@ -46,8 +46,8 @@ public class ImageDaoImpl implements ImageDao {
             imageUpds.add(imageUpd);
         }
 
-        ImageData imageData = new ImageData(imageUpds);
-        return imageData;
+        ImageListData imageListData = new ImageListData(imageUpds);
+        return imageListData;
     }
 
     /**
