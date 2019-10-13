@@ -27,6 +27,11 @@ public class UserEntityServiceImpl implements UserEntityService {
     }
 
     @Override
+    public Optional<UserEntity> findOneByUserName(String userName) {
+        return userEntityRepository.findOneByUserName(userName);
+    }
+
+    @Override
     public Optional<UserEntity> findByUserId(Long id) {
         return userEntityRepository.findById(id);
     }

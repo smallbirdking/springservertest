@@ -11,6 +11,8 @@ public interface UserEntityService {
 
     List<UserEntity> findByUserName(String userName);
 
+    Optional<UserEntity> findOneByUserName(String userName);
+
     Optional<UserEntity> findByUserId(Long id);
 
     Optional<UserEntity> insertUser(UserEntity userEntity);

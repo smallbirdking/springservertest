@@ -33,5 +33,6 @@ dependencies {
     compile('org.springframework.boot:spring-boot-devtools')
     compile('javax.xml.bind:jaxb-api:2.3.0')
     compile('mysql:mysql-connector-java')
+    compile('io.jsonwebtoken:jjwt:0.2')
     testCompile('org.springframework.boot:spring-boot-starter-test')
 }
