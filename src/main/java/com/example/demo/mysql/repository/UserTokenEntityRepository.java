@@ -20,6 +20,9 @@ public interface UserTokenEntityRepository extends CrudRepository<UserTokenEntit
     @Query("select u from UserTokenEntity u where u.userId = ?1 and u.token = ?2")
     Optional<UserTokenEntity> findByUserIDAndToken(long id, String token);
 
+    @Query("select u from UserTokenEntity u where u.userId = ?1 and u.refreshToken = ?2")
+    Optional<UserTokenEntity> findByUserIDAndRefreshToken(long id, String refreshToken);
+
     @Transactional()
     @Modifying
     @Query("delete from UserTokenEntity where userId = ?1 and refreshToken = ?2")

@@ -1,12 +1,16 @@
 package com.example.demo.mysql.service.serviceimpl;
 
+import com.example.demo.Util.LoginUtil;
 import com.example.demo.mysql.entity.UserTokenEntity;
 import com.example.demo.mysql.repository.UserTokenEntityRepository;
 import com.example.demo.mysql.service.UserTokenService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 
+import java.io.UnsupportedEncodingException;
 import java.sql.Timestamp;
+import java.util.Date;
 import java.util.List;
 import java.util.Optional;
 
@@ -27,11 +31,13 @@ public class UserTokenServiceImpl implements UserTokenService {
     }
 
     @Override
+    @Transactional
     public int deleteByUserIdAndRefToken(long id, String refreshToken) {
         return userTokenEntityRepository.deleteByUsername(id, refreshToken);
     }
 
     @Override
+    @Transactional
     public Optional<UserTokenEntity> insertUserToken(UserTokenEntity userTokenEntity) {
         UserTokenEntity tokenEntity = userTokenEntityRepository.save(userTokenEntity);
         return Optional.of(tokenEntity);
@@ -69,7 +75,20 @@ public class UserTokenServiceImpl implements UserTokenService {
     }
 
     @Override
-    public Optional<UserTokenEntity> updateToken(long id, String refreshToken) {
+    @Transactional
+    public Optional<UserTokenEntity> updateToken(long userId, String refreshToken, String device) {
+        Optional<UserTokenEntity> userToken = userTokenEntityRepository.findByUserIDAndRefreshToken(userId, refreshToken);
+        if (userToken.isPresent()) {
+            Date expire = LoginUtil.generateTokenExpiry();
+            try {
+                userToken.get().setToken(LoginUtil.generateRefreshToken(userId, expire, device));
+                userToken.get().setTokenExpiry(new Timestamp(expire.getTime()));
+            } catch (UnsupportedEncodingException e) {
+                e.printStackTrace();
+            }
+
+            return Optional.of(userTokenEntityRepository.save(userToken.get()));
+        }
         return Optional.empty();
     }
 }

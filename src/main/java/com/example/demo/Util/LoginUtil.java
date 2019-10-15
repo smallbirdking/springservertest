@@ -10,9 +10,9 @@ import java.util.HashMap;
 public class LoginUtil {
 
     public static final long MINUTE_TTL = 60*1000;  //millisecond
-    public static final long HOURS_TTL = 60*60*1000;  //millisecond
-    public static final long DAY_TTL = 12*60*60*1000;  //millisecond
-    public static final long MONTH_TTL = 30*12*60*60*1000;  //millisecond
+    public static final long HOURS_TTL = 60*60*1000L;  //millisecond
+    public static final long DAY_TTL = 24*60*60*1000L;  //millisecond
+    public static final long MONTH_TTL = 30*24*60*60*1000L;  //millisecond
 
     private LoginUtil() {
     }
@@ -49,7 +49,7 @@ public class LoginUtil {
 
 
     public static Date generateTokenExpiry(Date currentDate, long duration){
-        if (currentDate == null && duration > 0) {
+        if (currentDate == null || duration < 0) {
             return null;
         }
         long time = currentDate.getTime();
