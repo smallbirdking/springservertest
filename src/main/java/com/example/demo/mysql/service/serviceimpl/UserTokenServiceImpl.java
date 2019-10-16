@@ -80,14 +80,17 @@ public class UserTokenServiceImpl implements UserTokenService {
         Optional<UserTokenEntity> userToken = userTokenEntityRepository.findByUserIDAndRefreshToken(userId, refreshToken);
         if (userToken.isPresent()) {
             Date expire = LoginUtil.generateTokenExpiry();
+            UserTokenEntity userTokenEntity = null;
             try {
                 userToken.get().setToken(LoginUtil.generateRefreshToken(userId, expire, device));
                 userToken.get().setTokenExpiry(new Timestamp(expire.getTime()));
+                userTokenEntity = userTokenEntityRepository.save(userToken.get());
             } catch (UnsupportedEncodingException e) {
                 e.printStackTrace();
             }
-
-            return Optional.of(userTokenEntityRepository.save(userToken.get()));
+            if (userTokenEntity != null) {
+                Optional.of(userTokenEntity);
+            }
         }
         return Optional.empty();
     }

@@ -19,6 +19,6 @@ public interface UserTokenService {
 
     boolean verifyRefreshTokenAvailable(Optional<UserTokenEntity> userTokenEntity);
 
-    Optional<UserTokenEntity> updateToken(long id, String refreshToken);
+    Optional<UserTokenEntity> updateToken(long id, String refreshToken, String device);
 
 }
