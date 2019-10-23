@@ -4,6 +4,7 @@ import com.example.demo.Util.LoginUtil;
 import com.example.demo.mysql.entity.LoginInfo;
 import com.example.demo.mysql.entity.LoginResponse;
 import com.example.demo.mysql.entity.UserEntity;
+import com.example.demo.mysql.entity.UserTokenEntity;
 import com.example.demo.mysql.service.UserEntityService;
 import com.example.demo.mysql.service.UserTokenService;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -12,6 +13,7 @@ import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
 
 import java.io.UnsupportedEncodingException;
+import java.sql.Timestamp;
 import java.util.Date;
 import java.util.Optional;
 
@@ -19,6 +21,9 @@ import java.util.Optional;
 @Controller
 @RequestMapping("/login")
 public class LoginController {
+
+    public static final String ALL = "ALL";
+
     @Autowired
     private UserEntityService userEntityService;
 
@@ -41,12 +46,19 @@ public class LoginController {
                 String token = LoginUtil.generateToken(userEntity.getId(), expiresIn, loginInfo.getDevice());
                 response.setAccessToken(token);
                 response.setExpiresIn(expiresIn);
-                String refreshToken = LoginUtil.generateToken(userEntity.getId(), expiresIn, loginInfo.getDevice());
+                Date refreshExpiry = LoginUtil.generateRefreshTokenExpiry();
+                String refreshToken = LoginUtil.generateRefreshToken(userEntity.getId(), refreshExpiry, loginInfo.getDevice());
                 response.setRefreshToken(refreshToken);
 
+                UserTokenEntity userToken = new UserTokenEntity();
+                userToken.setUserId(userEntity.getId());
+                userToken.setToken(LoginUtil.generateToken(userEntity.getId(), expiresIn, loginInfo.getDevice()));
+                userToken.setTokenExpiry(new Timestamp(expiresIn.getTime()));
+                userToken.setRefreshToken(LoginUtil.generateRefreshToken(userEntity.getId(), refreshExpiry, loginInfo.getDevice()));
+                userToken.setRefreshTokenExpiry(new Timestamp(refreshExpiry.getTime()));
+                userToken.setScope(ALL);
+                userTokenService.insertUserToken(userToken);
 
-//                java.util.Date utilDate = new java.util.Date(sqlDate.getTime());   // sql -> util
-//                java.sql.Date sqlDate = new java.sql.Date(utilDate.getTime());   // util -> sql
             } catch (UnsupportedEncodingException e) {
                 response.setErrcode(103);
                 response.setErrmsg("New token failed");
