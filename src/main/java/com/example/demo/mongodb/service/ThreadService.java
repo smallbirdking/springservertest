@@ -1,6 +1,6 @@
 package com.example.demo.mongodb.service;
 
-import com.example.demo.mongodb.entity.Thread;
+import com.example.demo.mongodb.entity.thread.Thread;
 
 import java.util.List;
 

@@ -3,6 +3,7 @@ package com.example.demo.mongodb.entity;
 public class UserHeader {
     long userId;
     String token;
+    String device;
     String refreshToken;
 
     public long getUserId() {
@@ -11,6 +12,14 @@ public class UserHeader {
 
     public void setUserId(long userId) {
         this.userId = userId;
+    }
+
+    public String getDevice() {
+        return device;
+    }
+
+    public void setDevice(String device) {
+        this.device = device;
     }
 
     public String getToken() {

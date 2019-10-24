@@ -4,7 +4,7 @@ package com.example.demo.mongodb;
 import com.example.demo.mongodb.dao.ThreadDao;
 import com.example.demo.mongodb.dao.UserDao;
 import com.example.demo.mongodb.dao.UserProfileDao;
-import com.example.demo.mongodb.entity.Thread;
+import com.example.demo.mongodb.entity.thread.Thread;
 import com.example.demo.mongodb.entity.User;
 import com.example.demo.mongodb.entity.UserProfile;
 import org.junit.Test;

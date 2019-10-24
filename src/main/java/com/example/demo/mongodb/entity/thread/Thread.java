@@ -1,4 +1,4 @@
-package com.example.demo.mongodb.entity;
+package com.example.demo.mongodb.entity.thread;
 
 import org.springframework.data.annotation.CreatedBy;
 import org.springframework.data.mongodb.core.mapping.Document;

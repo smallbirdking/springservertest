@@ -1,7 +1,7 @@
 package com.example.demo.mongodb.dao.daoImpl;
 
 import com.example.demo.mongodb.dao.ThreadDao;
-import com.example.demo.mongodb.entity.Thread;
+import com.example.demo.mongodb.entity.thread.Thread;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.mongodb.core.MongoTemplate;
 import org.springframework.data.mongodb.core.query.Criteria;

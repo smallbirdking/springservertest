@@ -1,7 +1,7 @@
 package com.example.demo.mongodb.service.serviceimpl;
 
 import com.example.demo.mongodb.dao.ThreadDao;
-import com.example.demo.mongodb.entity.Thread;
+import com.example.demo.mongodb.entity.thread.Thread;
 import com.example.demo.mongodb.service.ThreadService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;

@@ -1,6 +1,6 @@
 package com.example.demo.mongodb.dao;
 
-import com.example.demo.mongodb.entity.Thread;
+import com.example.demo.mongodb.entity.thread.Thread;
 
 import java.util.List;
 
