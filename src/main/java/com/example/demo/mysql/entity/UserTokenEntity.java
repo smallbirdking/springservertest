@@ -13,6 +13,8 @@ public class UserTokenEntity {
     private Timestamp tokenExpiry;
     private Timestamp refreshTokenExpiry;
     private String scope;
+    private String oldToken;
+    private String device;
 
     @Id
     @Column(name = "ID")
@@ -113,5 +115,25 @@ public class UserTokenEntity {
         result = 31 * result + (refreshTokenExpiry != null ? refreshTokenExpiry.hashCode() : 0);
         result = 31 * result + (scope != null ? scope.hashCode() : 0);
         return result;
+    }
+
+    @Basic
+    @Column(name = "OLD_TOKEN")
+    public String getOldToken() {
+        return oldToken;
+    }
+
+    public void setOldToken(String oldToken) {
+        this.oldToken = oldToken;
+    }
+
+    @Basic
+    @Column(name = "DEVICE")
+    public String getDevice() {
+        return device;
+    }
+
+    public void setDevice(String device) {
+        this.device = device;
     }
 }

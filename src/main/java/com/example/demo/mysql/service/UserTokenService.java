@@ -15,10 +15,10 @@ public interface UserTokenService {
 
     Optional<UserTokenEntity> insertUserToken(UserTokenEntity userTokenEntity);
 
-    boolean verifyTokenAvailable(Optional<UserTokenEntity> userTokenEntity);
+    boolean verifyTokenAvailable(Optional<UserTokenEntity> userTokenEntity, String token);
 
-    boolean verifyRefreshTokenAvailable(Optional<UserTokenEntity> userTokenEntity);
+    boolean verifyRefreshTokenAvailable(Optional<UserTokenEntity> userTokenEntity, String refreshToken);
 
-    Optional<UserTokenEntity> updateToken(long id, String refreshToken, String device);
+    Optional<UserTokenEntity> updateToken(long id, String token, String refreshToken, String device);
 
 }

@@ -44,47 +44,58 @@ public class UserTokenServiceImpl implements UserTokenService {
     }
 
     @Override
-    public boolean verifyTokenAvailable(Optional<UserTokenEntity> userTokenEntity) {
-        if (!userTokenEntity.isPresent()) {
-            return false;
+    public boolean verifyTokenAvailable(Optional<UserTokenEntity> userTokenEntity, String token) {
+        if (userTokenEntity.isPresent()) {
+            UserTokenEntity userToken = userTokenEntity.get();
+            Timestamp tokenExpiry = userToken.getTokenExpiry();
+            Timestamp now = new Timestamp(System.currentTimeMillis());
+            if (now.before(tokenExpiry)) {
+                String checkToken = userToken.getToken();
+                String oldToken = userToken.getOldToken();
+                if (checkToken.equals(token)){
+                    return true;
+                } else if (oldToken.equals(token)) {
+                    return true;
+                }
+            }
         }
-        UserTokenEntity userToken = userTokenEntity.get();
-        Timestamp tokenExpiry = userToken.getTokenExpiry();
-        Timestamp now = new Timestamp(System.currentTimeMillis());
-        if (now.before(tokenExpiry)) {
-            return true;
-        } else {
-            return false;
-        }
-
+        return false;
     }
 
     @Override
-    public boolean verifyRefreshTokenAvailable(Optional<UserTokenEntity> userTokenEntity) {
-        if (!userTokenEntity.isPresent()) {
-            return false;
+    public boolean verifyRefreshTokenAvailable(Optional<UserTokenEntity> userTokenEntity, String refreshToken) {
+        if (userTokenEntity.isPresent()) {
+            UserTokenEntity userToken = userTokenEntity.get();
+            Timestamp refreshTokenExpiry = userToken.getRefreshTokenExpiry();
+            Timestamp now = new Timestamp(System.currentTimeMillis());
+            if (now.before(refreshTokenExpiry)) {
+                String checkRefreshToken = userToken.getRefreshToken();
+                if (checkRefreshToken.equals(refreshToken)){
+                    return true;
+                }
+            }
         }
-        UserTokenEntity userToken = userTokenEntity.get();
-        Timestamp refreshTokenExpiry = userToken.getRefreshTokenExpiry();
-        Timestamp now = new Timestamp(System.currentTimeMillis());
-        if (now.before(refreshTokenExpiry)) {
-            return true;
-        } else {
-            return false;
-        }
+        return false;
     }
 
     @Override
     @Transactional
-    public Optional<UserTokenEntity> updateToken(long userId, String refreshToken, String device) {
+    public Optional<UserTokenEntity> updateToken(long userId, String token, String  refreshToken, String device) {
         Optional<UserTokenEntity> userToken = userTokenEntityRepository.findByUserIDAndRefreshToken(userId, refreshToken);
         if (userToken.isPresent()) {
-            if (verifyRefreshTokenAvailable(userToken)) {
+            if (verifyTokenAvailable(userToken, token)){
+                return userToken;
+            }
+            if (verifyRefreshTokenAvailable(userToken, refreshToken)) {
                 Date expire = LoginUtil.generateTokenExpiry();
+                Date refreshExpiry = LoginUtil.generateRefreshTokenExpiry();
+                String oldToken = userToken.get().getToken();
                 UserTokenEntity userTokenEntity = null;
                 try {
                     userToken.get().setToken(LoginUtil.generateRefreshToken(userId, expire, device));
                     userToken.get().setTokenExpiry(new Timestamp(expire.getTime()));
+                    userToken.get().setOldToken(oldToken);
+                    userToken.get().setRefreshTokenExpiry(new Timestamp(refreshExpiry.getTime()));
                     userTokenEntity = userTokenEntityRepository.save(userToken.get());
                 } catch (UnsupportedEncodingException e) {
                     e.printStackTrace();

@@ -42,11 +42,13 @@ public class ThreadController {
         ThreadResponse response = new ThreadResponse();
         long userId = userHeader.getUserId();
         String token = userHeader.getToken();
-        Optional<UserTokenEntity> userTokenEntity = userTokenService.findByUserIDAndToken(userId, token);
-        boolean available = userTokenService.verifyTokenAvailable(userTokenEntity);
+        String refreshToken = userHeader.getRefreshToken();
+        String device = userHeader.getDevice();
+        Optional<UserTokenEntity> userTokenEntity = userTokenService.findByUserIDAndDevice(userId, device);
+        boolean available = userTokenService.verifyTokenAvailable(userTokenEntity, token);
 
         if (!available && userTokenEntity.isPresent()) {
-            Optional<UserTokenEntity> newUserTokenEntity = userTokenService.updateToken(userTokenEntity.get().getUserId(), userTokenEntity.get().getRefreshToken(), userHeader.getDevice());
+            Optional<UserTokenEntity> newUserTokenEntity = userTokenService.updateToken(userTokenEntity.get().getUserId(), token, refreshToken, device);
             response.setTocken(newUserTokenEntity.get().getToken());
             response.setRefreshtoken(newUserTokenEntity.get().getRefreshToken());
         }
