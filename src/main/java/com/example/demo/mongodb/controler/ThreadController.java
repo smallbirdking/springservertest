@@ -37,7 +37,7 @@ public class ThreadController {
 //        threadService.insertThread(thread);
 //    }
 
-    @RequestMapping(value= "/insert_thread/thread_content", method = RequestMethod.PUT)
+    @RequestMapping(value = "/insert_thread/thread_content", method = RequestMethod.PUT)
     public ThreadResponse saveThread(@RequestHeader UserHeader userHeader, ThreadData threadContent) {
         ThreadResponse response = new ThreadResponse();
         long userId = userHeader.getUserId();

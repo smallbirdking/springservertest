@@ -32,6 +32,9 @@ public interface UserTokenEntityRepository extends CrudRepository<UserTokenEntit
     @Modifying
     @Query("UPDATE UserTokenEntity u SET u.token = :token WHERE u.userId = :id")
     int upadte(@Param("id") long id,@Param("token") String token);
+
+    @Query("select u from UserTokenEntity u where u.userId = ?1 and u.device = ?2")
+    Optional<UserTokenEntity> findByUserIDAndDevice(long id, String device);
 //    @Async
 //     (t.dbname like '%'||?1||'%' or ?1='')
 //    ListenableFuture<UserEntity> findOneByLastname(String lastname);

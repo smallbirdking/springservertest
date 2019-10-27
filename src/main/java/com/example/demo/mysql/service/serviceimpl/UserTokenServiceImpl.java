@@ -31,6 +31,11 @@ public class UserTokenServiceImpl implements UserTokenService {
     }
 
     @Override
+    public Optional<UserTokenEntity> findByUserIDAndDevice(long id, String device) {
+        return userTokenEntityRepository.findByUserIDAndDevice(id, device);
+    }
+
+    @Override
     @Transactional
     public int deleteByUserIdAndRefToken(long id, String refreshToken) {
         return userTokenEntityRepository.deleteByUsername(id, refreshToken);

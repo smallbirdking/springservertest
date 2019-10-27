@@ -11,6 +11,8 @@ public interface UserTokenService {
 
     Optional<UserTokenEntity> findByUserIDAndToken(long id, String token);
 
+    Optional<UserTokenEntity> findByUserIDAndDevice(long id, String device);
+
     int deleteByUserIdAndRefToken(long id, String refreshToken);
 
     Optional<UserTokenEntity> insertUserToken(UserTokenEntity userTokenEntity);
