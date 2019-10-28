@@ -49,20 +49,21 @@ public class ThreadController {
 
         if (!available && userTokenEntity.isPresent()) {
             Optional<UserTokenEntity> newUserTokenEntity = userTokenService.updateToken(userTokenEntity.get().getUserId(), token, refreshToken, device);
+            if (newUserTokenEntity.isPresent()) {
+                //Error need login
+            }
             response.setTocken(newUserTokenEntity.get().getToken());
             response.setRefreshtoken(newUserTokenEntity.get().getRefreshToken());
         }
 
         Thread thread = new Thread();
         thread.setCreatedUserId(userId);
-        thread.setCreatedTime(new Date());
+        thread.setCreatedTime(threadContent.getCreatedTime());
         thread.setTrBody(threadContent.getContent());
         thread.setTrSubject(threadContent.getTitle());
 
         threadService.insertThread(thread);
 
         return response;
-
     }
-
 }
