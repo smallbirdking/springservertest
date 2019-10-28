@@ -1,5 +1,6 @@
 package com.example.demo.mongodb.controler;
 
+import com.example.demo.entity.LoginException;
 import com.example.demo.mongodb.entity.UserHeader;
 import com.example.demo.mongodb.entity.thread.Thread;
 import com.example.demo.mongodb.entity.thread.ThreadData;
@@ -7,19 +8,21 @@ import com.example.demo.mongodb.entity.thread.ThreadResponse;
 import com.example.demo.mongodb.service.ThreadService;
 import com.example.demo.mysql.entity.UserTokenEntity;
 import com.example.demo.mysql.service.UserTokenService;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.RequestHeader;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.RestController;
 
-import java.util.Date;
 import java.util.List;
 import java.util.Optional;
 
 @RestController
 @RequestMapping("/thread")
 public class ThreadController {
+    private static final Logger LOG = LoggerFactory.getLogger(ThreadController.class);
 
     @Autowired
     private ThreadService threadService;
@@ -48,12 +51,17 @@ public class ThreadController {
         boolean available = userTokenService.verifyTokenAvailable(userTokenEntity, token);
 
         if (!available && userTokenEntity.isPresent()) {
-            Optional<UserTokenEntity> newUserTokenEntity = userTokenService.updateToken(userTokenEntity.get().getUserId(), token, refreshToken, device);
-            if (newUserTokenEntity.isPresent()) {
-                //Error need login
+            try{
+                Optional<UserTokenEntity> newUserTokenEntity = userTokenService.updateToken(userTokenEntity.get().getUserId(), token, refreshToken, device);
+                if (!newUserTokenEntity.isPresent()) {
+                    //Error need login
+                    throw new LoginException();
+                }
+                response.setTocken(newUserTokenEntity.get().getToken());
+                response.setRefreshtoken(newUserTokenEntity.get().getRefreshToken());
+            } catch (Exception e){
+                LOG.error("findByStudentId error:",e);
             }
-            response.setTocken(newUserTokenEntity.get().getToken());
-            response.setRefreshtoken(newUserTokenEntity.get().getRefreshToken());
         }
 
         Thread thread = new Thread();
