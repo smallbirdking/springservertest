@@ -60,7 +60,7 @@ public class ThreadController {
                 response.setTocken(newUserTokenEntity.get().getToken());
                 response.setRefreshtoken(newUserTokenEntity.get().getRefreshToken());
             } catch (Exception e){
-                LOG.error("findByStudentId error:",e);
+                LOG.error("save thread error:",e);
             }
         }
 
