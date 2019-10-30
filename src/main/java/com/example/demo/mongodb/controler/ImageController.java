@@ -16,7 +16,9 @@ import org.springframework.web.multipart.MultipartFile;
 
 import java.io.IOException;
 import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 
 @RestController
 @RequestMapping("/image")
@@ -52,7 +54,7 @@ public class ImageController {
     }
 
     @PutMapping(value = "/upload/multipimages")
-    public void saveMultipImages(@RequestHeader("head") UserHeader userHeader, @RequestParam("file") List<MultipartFile> files) throws IOException {
+    public ImageResponse saveMultipImages(@RequestHeader("head") UserHeader userHeader, @RequestParam("file") List<MultipartFile> files) throws IOException {
         System.out.println(files);
         ImageResponse response = new ImageResponse();
         long userId = userTokenService.verifyUserAuthen(userHeader, response);
@@ -65,6 +67,12 @@ public class ImageController {
                 imageList.add(image);
             }
             imgService.saveMultipImages(imageList);
+
+            Map<String, String> newUrls = new HashMap<>();
+            newUrls.put();
+            response.setUrls();
         }
+
+        return response;
     }
 }

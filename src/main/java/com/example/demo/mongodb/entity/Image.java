@@ -13,7 +13,6 @@ public class Image {
     @Field("URL")
     String url;
 
-
     @Field("DATA")
     private Binary content; // 文件内容
 
