@@ -1,9 +1,14 @@
 package com.example.demo.mysql.service.serviceimpl;
 
 import com.example.demo.Util.LoginUtil;
+import com.example.demo.entity.BaseResponse;
+import com.example.demo.entity.LoginException;
+import com.example.demo.mongodb.entity.UserHeader;
 import com.example.demo.mysql.entity.UserTokenEntity;
 import com.example.demo.mysql.repository.UserTokenEntityRepository;
 import com.example.demo.mysql.service.UserTokenService;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
@@ -16,6 +21,7 @@ import java.util.Optional;
 
 @Service("userTokenServiceImpl")
 public class UserTokenServiceImpl implements UserTokenService {
+    private static final Logger LOG = LoggerFactory.getLogger(UserTokenServiceImpl.class);
 
     @Autowired
     private UserTokenEntityRepository userTokenEntityRepository;
@@ -111,5 +117,34 @@ public class UserTokenServiceImpl implements UserTokenService {
             }
         }
         return Optional.empty();
+    }
+
+    @Override
+    public long verifyUserAuthen(UserHeader userHeader, BaseResponse response) {
+        long userId = userHeader.getUserId();
+        String token = userHeader.getToken();
+        String refreshToken = userHeader.getRefreshToken();
+        String device = userHeader.getDevice();
+        Optional<UserTokenEntity> userTokenEntity = findByUserIDAndDevice(userId, device);
+        boolean available = verifyTokenAvailable(userTokenEntity, token);
+
+        if (!available && userTokenEntity.isPresent()) {
+            try{
+                Optional<UserTokenEntity> newUserTokenEntity = updateToken(userTokenEntity.get().getUserId(), token, refreshToken, device);
+                if (!newUserTokenEntity.isPresent()) {
+                    //Error need login
+                    userId = -1;
+                    throw new LoginException("NEED LOGIN", "1000");
+                }
+                response.setCode("0001");
+                response.setMsg("NEED REFRESH TOKEN");
+                response.setTocken(newUserTokenEntity.get().getToken());
+                response.setRefreshtoken(newUserTokenEntity.get().getRefreshToken());
+            } catch (Exception e){
+                userId = -1;
+                LOG.error("verifyUserAuthen error:",e);
+            }
+        }
+        return userId;
     }
 }

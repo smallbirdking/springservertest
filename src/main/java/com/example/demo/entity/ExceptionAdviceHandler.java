@@ -37,8 +37,8 @@ public class ExceptionAdviceHandler {
     public BaseResponse loginExceptionHandler(LoginException e) {
         e.printStackTrace();
         BaseResponse response = new BaseResponse();
-        response.setCode("1000");
-        response.setMsg("NEED LOGIN");
+        response.setCode(e.getCode());
+        response.setMsg(e.getMsg());
         return response;
     }
 }

@@ -1,11 +1,10 @@
 package com.example.demo.mongodb.controler;
 
-import com.example.demo.entity.LoginException;
 import com.example.demo.mongodb.entity.Image;
 import com.example.demo.mongodb.entity.ImageListData;
 import com.example.demo.mongodb.entity.UserHeader;
+import com.example.demo.mongodb.entity.image.ImageResponse;
 import com.example.demo.mongodb.service.ImageService;
-import com.example.demo.mysql.entity.UserTokenEntity;
 import com.example.demo.mysql.service.UserTokenService;
 import org.bson.BsonBinarySubType;
 import org.bson.types.Binary;
@@ -18,7 +17,6 @@ import org.springframework.web.multipart.MultipartFile;
 import java.io.IOException;
 import java.util.ArrayList;
 import java.util.List;
-import java.util.Optional;
 
 @RestController
 @RequestMapping("/image")
@@ -56,36 +54,17 @@ public class ImageController {
     @PutMapping(value = "/upload/multipimages")
     public void saveMultipImages(@RequestHeader("head") UserHeader userHeader, @RequestParam("file") List<MultipartFile> files) throws IOException {
         System.out.println(files);
-
-        long userId = userHeader.getUserId();
-        String token = userHeader.getToken();
-        String refreshToken = userHeader.getRefreshToken();
-        String device = userHeader.getDevice();
-        Optional<UserTokenEntity> userTokenEntity = userTokenService.findByUserIDAndDevice(userId, device);
-        boolean available = userTokenService.verifyTokenAvailable(userTokenEntity, token);
-
-        if (!available && userTokenEntity.isPresent()) {
-          try{
-            Optional<UserTokenEntity> newUserTokenEntity = userTokenService.updateToken(userTokenEntity.get().getUserId(), token, refreshToken, device);
-            if (!newUserTokenEntity.isPresent()) {
-              //Error need login
-              throw new LoginException();
+        ImageResponse response = new ImageResponse();
+        long userId = userTokenService.verifyUserAuthen(userHeader, response);
+        if (userId>0) {
+            List<Image> imageList = new ArrayList<>();
+            for (MultipartFile file :
+                    files) {
+                Image image = new Image();
+                image.setContent(new Binary(BsonBinarySubType.BINARY, file.getBytes()));
+                imageList.add(image);
             }
-            response.setTocken(newUserTokenEntity.get().getToken());
-            response.setRefreshtoken(newUserTokenEntity.get().getRefreshToken());
-          } catch (Exception e){
-            LOG.error("save images error:",e);
-          }
+            imgService.saveMultipImages(imageList);
         }
-
-
-        List<Image> imageList = new ArrayList<>();
-        for (MultipartFile file :
-                files) {
-            Image image = new Image();
-            image.setContent(new Binary(BsonBinarySubType.BINARY, file.getBytes()));
-            imageList.add(image);
-        }
-        imgService.saveMultipImages(imageList);
     }
 }

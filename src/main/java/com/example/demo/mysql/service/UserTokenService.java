@@ -1,5 +1,7 @@
 package com.example.demo.mysql.service;
 
+import com.example.demo.entity.BaseResponse;
+import com.example.demo.mongodb.entity.UserHeader;
 import com.example.demo.mysql.entity.UserTokenEntity;
 
 import java.util.List;
@@ -23,4 +25,5 @@ public interface UserTokenService {
 
     Optional<UserTokenEntity> updateToken(long id, String token, String refreshToken, String device);
 
+    long verifyUserAuthen(UserHeader userHeader, BaseResponse response);
 }

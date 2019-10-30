@@ -1,12 +1,10 @@
 package com.example.demo.mongodb.controler;
 
-import com.example.demo.entity.LoginException;
 import com.example.demo.mongodb.entity.UserHeader;
 import com.example.demo.mongodb.entity.thread.Thread;
 import com.example.demo.mongodb.entity.thread.ThreadData;
 import com.example.demo.mongodb.entity.thread.ThreadResponse;
 import com.example.demo.mongodb.service.ThreadService;
-import com.example.demo.mysql.entity.UserTokenEntity;
 import com.example.demo.mysql.service.UserTokenService;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -17,7 +15,6 @@ import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.RestController;
 
 import java.util.List;
-import java.util.Optional;
 
 @RestController
 @RequestMapping("/thread")
@@ -43,35 +40,16 @@ public class ThreadController {
     @RequestMapping(value = "/insert_thread/thread_content", method = RequestMethod.PUT)
     public ThreadResponse saveThread(@RequestHeader UserHeader userHeader, ThreadData threadContent) {
         ThreadResponse response = new ThreadResponse();
-        long userId = userHeader.getUserId();
-        String token = userHeader.getToken();
-        String refreshToken = userHeader.getRefreshToken();
-        String device = userHeader.getDevice();
-        Optional<UserTokenEntity> userTokenEntity = userTokenService.findByUserIDAndDevice(userId, device);
-        boolean available = userTokenService.verifyTokenAvailable(userTokenEntity, token);
+        long userId = userTokenService.verifyUserAuthen(userHeader, response);
 
-        if (!available && userTokenEntity.isPresent()) {
-            try{
-                Optional<UserTokenEntity> newUserTokenEntity = userTokenService.updateToken(userTokenEntity.get().getUserId(), token, refreshToken, device);
-                if (!newUserTokenEntity.isPresent()) {
-                    //Error need login
-                    throw new LoginException();
-                }
-                response.setTocken(newUserTokenEntity.get().getToken());
-                response.setRefreshtoken(newUserTokenEntity.get().getRefreshToken());
-            } catch (Exception e){
-                LOG.error("save thread error:",e);
-            }
+        if (userId>0){
+            Thread thread = new Thread();
+            thread.setCreatedUserId(userId);
+            thread.setCreatedTime(threadContent.getCreatedTime());
+            thread.setTrBody(threadContent.getContent());
+            thread.setTrSubject(threadContent.getTitle());
+            threadService.insertThread(thread);
         }
-
-        Thread thread = new Thread();
-        thread.setCreatedUserId(userId);
-        thread.setCreatedTime(threadContent.getCreatedTime());
-        thread.setTrBody(threadContent.getContent());
-        thread.setTrSubject(threadContent.getTitle());
-
-        threadService.insertThread(thread);
-
         return response;
     }
 }
