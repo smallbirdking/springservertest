@@ -1,8 +1,10 @@
 package com.example.demo.mongodb.controler;
 
+import com.example.demo.Util.PathUtil;
 import com.example.demo.mongodb.entity.Image;
 import com.example.demo.mongodb.entity.ImageListData;
 import com.example.demo.mongodb.entity.UserHeader;
+import com.example.demo.mongodb.entity.image.ImageInfo;
 import com.example.demo.mongodb.entity.image.ImageResponse;
 import com.example.demo.mongodb.service.ImageService;
 import com.example.demo.mysql.service.UserTokenService;
@@ -19,6 +21,7 @@ import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
+import java.util.stream.Collectors;
 
 @RestController
 @RequestMapping("/image")
@@ -54,7 +57,7 @@ public class ImageController {
     }
 
     @PutMapping(value = "/upload/multipimages")
-    public ImageResponse saveMultipImages(@RequestHeader("head") UserHeader userHeader, @RequestParam("file") List<MultipartFile> files) throws IOException {
+    public ImageResponse saveMultipImages(@RequestHeader("head") UserHeader userHeader, List<ImageInfo> imageInfos, @RequestParam("file") List<MultipartFile> files) throws IOException {
         System.out.println(files);
         ImageResponse response = new ImageResponse();
         long userId = userTokenService.verifyUserAuthen(userHeader, response);
@@ -68,9 +71,11 @@ public class ImageController {
             }
             imgService.saveMultipImages(imageList);
 
-            Map<String, String> newUrls = new HashMap<>();
-            newUrls.put();
-            response.setUrls();
+          Map<String, String> newUrls = new HashMap<>();
+          imageInfos.forEach((imageInfo) -> {
+            newUrls.put(imageInfo.getUrl(), PathUtil.generateSavingPath(userId, imageInfo.getImgType()));
+          });
+          response.setUrls(newUrls);
         }
 
         return response;
