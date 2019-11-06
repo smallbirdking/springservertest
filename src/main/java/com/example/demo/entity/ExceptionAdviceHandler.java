@@ -33,7 +33,7 @@ public class ExceptionAdviceHandler {
     /**
      * 未知异常
      */
-    @ExceptionHandler(value = Exception.class)
+    @ExceptionHandler(value = LoginException.class)
     public BaseResponse loginExceptionHandler(LoginException e) {
         e.printStackTrace();
         BaseResponse response = new BaseResponse();

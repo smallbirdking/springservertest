@@ -8,9 +8,10 @@ import com.example.demo.mysql.entity.UserTokenEntity;
 import com.example.demo.mysql.service.UserEntityService;
 import com.example.demo.mysql.service.UserTokenService;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.stereotype.Controller;
-import org.springframework.web.bind.annotation.PostMapping;
+import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RequestMethod;
+import org.springframework.web.bind.annotation.RestController;
 
 import java.io.UnsupportedEncodingException;
 import java.sql.Timestamp;
@@ -18,8 +19,8 @@ import java.util.Date;
 import java.util.Optional;
 
 
-@Controller
-@RequestMapping("/login")
+@RestController
+@RequestMapping("/signin")
 public class LoginController {
 
     public static final String ALL = "ALL";
@@ -30,8 +31,8 @@ public class LoginController {
     @Autowired
     private UserTokenService userTokenService;
 
-    @PostMapping(value = "/username")
-    public LoginResponse loginByUsername(LoginInfo loginInfo) {
+    @RequestMapping(value = "/username", method = RequestMethod.POST)
+    public LoginResponse loginByUsername(@RequestBody LoginInfo loginInfo) {
         LoginResponse response = new LoginResponse();
         Optional<UserEntity> user = userEntityService.findOneByUserName(loginInfo.getUsername());
         if (!user.isPresent()) {
@@ -57,6 +58,7 @@ public class LoginController {
                 userToken.setRefreshToken(LoginUtil.generateRefreshToken(userEntity.getId(), refreshExpiry, loginInfo.getDevice()));
                 userToken.setRefreshTokenExpiry(new Timestamp(refreshExpiry.getTime()));
                 userToken.setScope(ALL);
+                userToken.setDevice(loginInfo.getDevice());
                 userTokenService.insertUserToken(userToken);
 
             } catch (UnsupportedEncodingException e) {
