@@ -51,7 +51,11 @@ public class LoginController {
                 String refreshToken = LoginUtil.generateRefreshToken(userEntity.getId(), refreshExpiry, loginInfo.getDevice());
                 response.setRefreshToken(refreshToken);
 
-                UserTokenEntity userToken = new UserTokenEntity();
+                Optional<UserTokenEntity> userTokenOriginal = userTokenService.findByUserIDAndDevice(userEntity.getId(), loginInfo.getDevice());
+
+                UserTokenEntity userToken = userTokenOriginal.isPresent() ? userTokenOriginal.get() : new UserTokenEntity();
+
+                //UserTokenEntity userToken = new UserTokenEntity();
                 userToken.setUserId(userEntity.getId());
                 userToken.setToken(LoginUtil.generateToken(userEntity.getId(), expiresIn, loginInfo.getDevice()));
                 userToken.setTokenExpiry(new Timestamp(expiresIn.getTime()));
