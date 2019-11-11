@@ -36,8 +36,8 @@ public class LoginController {
         LoginResponse response = new LoginResponse();
         Optional<UserEntity> user = userEntityService.findOneByUserName(loginInfo.getUsername());
         if (!user.isPresent()) {
-            response.setErrcode(101);
-            response.setErrmsg("No User found");
+            response.setCode("1001");
+            response.setMsg("No User found");
         }
         UserEntity userEntity = user.get();
         String userPassword = userEntity.getUserPassword();
@@ -45,6 +45,7 @@ public class LoginController {
             try {
                 Date expiresIn = LoginUtil.generateTokenExpiry();
                 String token = LoginUtil.generateToken(userEntity.getId(), expiresIn, loginInfo.getDevice());
+                response.setUserId(""+userEntity.getId());
                 response.setAccessToken(token);
                 response.setExpiresIn(expiresIn);
                 Date refreshExpiry = LoginUtil.generateRefreshTokenExpiry();
@@ -66,12 +67,12 @@ public class LoginController {
                 userTokenService.insertUserToken(userToken);
 
             } catch (UnsupportedEncodingException e) {
-                response.setErrcode(103);
-                response.setErrmsg("New token failed");
+                response.setCode("1003");
+                response.setMsg("New token failed");
             }
         } else {
-            response.setErrcode(102);
-            response.setErrmsg("Wrong password");
+            response.setCode("1002");
+            response.setMsg("Wrong password");
         }
         return response;
     }

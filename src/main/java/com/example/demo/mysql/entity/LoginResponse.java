@@ -1,16 +1,15 @@
 package com.example.demo.mysql.entity;
 
+import com.example.demo.entity.BaseResponse;
+
 import java.util.Date;
 
-public class LoginResponse {
+public class LoginResponse extends BaseResponse {
     private String accessToken;
     private Date expiresIn;
     private String refreshToken;
-    private String openid;
+    private String userId;
     private String scope;
-
-    private int errcode;
-    private String errmsg;
 
     public String getAccessToken() {
         return accessToken;
@@ -36,12 +35,12 @@ public class LoginResponse {
         this.refreshToken = refreshToken;
     }
 
-    public String getOpenid() {
-        return openid;
+    public String getUserId() {
+        return userId;
     }
 
-    public void setOpenid(String openid) {
-        this.openid = openid;
+    public void setUserId(String userId) {
+        this.userId = userId;
     }
 
     public String getScope() {
@@ -52,19 +51,4 @@ public class LoginResponse {
         this.scope = scope;
     }
 
-    public int getErrcode() {
-        return errcode;
-    }
-
-    public void setErrcode(int errcode) {
-        this.errcode = errcode;
-    }
-
-    public String getErrmsg() {
-        return errmsg;
-    }
-
-    public void setErrmsg(String errmsg) {
-        this.errmsg = errmsg;
-    }
 }
