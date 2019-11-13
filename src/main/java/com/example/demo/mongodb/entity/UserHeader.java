@@ -6,6 +6,13 @@ public class UserHeader {
     String device;
     String refreshToken;
 
+    public UserHeader(long userId, String token, String device, String refreshToken) {
+        this.userId = userId;
+        this.token = token;
+        this.device = device;
+        this.refreshToken = refreshToken;
+    }
+
     public long getUserId() {
         return userId;
     }

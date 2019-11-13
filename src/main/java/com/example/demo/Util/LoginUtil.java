@@ -48,7 +48,7 @@ public class LoginUtil {
     }
 
 
-    public static Date generateTokenExpiry(Date currentDate, long duration){
+    public static Date generateTokenExpiry(Date currentDate, long duration) {
         if (currentDate == null || duration < 0) {
             return null;
         }

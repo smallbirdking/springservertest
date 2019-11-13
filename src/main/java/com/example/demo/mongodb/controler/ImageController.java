@@ -1,7 +1,10 @@
 package com.example.demo.mongodb.controler;
 
+import com.example.demo.Util.AuthenUtil;
+import com.example.demo.Util.PathUtil;
 import com.example.demo.mongodb.entity.Image;
 import com.example.demo.mongodb.entity.ImageListData;
+import com.example.demo.mongodb.entity.UserHeader;
 import com.example.demo.mongodb.entity.image.ImageResponse;
 import com.example.demo.mongodb.service.ImageService;
 import com.example.demo.mysql.service.UserTokenService;
@@ -15,7 +18,10 @@ import org.springframework.web.multipart.MultipartFile;
 
 import javax.servlet.http.HttpServletRequest;
 import java.io.IOException;
+import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 
 @RestController
 @RequestMapping("/image")
@@ -53,30 +59,38 @@ public class ImageController {
     }
 
     @PutMapping(value = "/upload/multipimages")
-    public ImageResponse saveMultipImages(@RequestParam("file") List<MultipartFile> files,@RequestParam("path") List<String> paths,@RequestParam("extension")List<String> extensions ) throws IOException {
-        String token = requestHeader.getHeader("token");
-        //System.out.println(imageInfo);
+    public ImageResponse saveMultipImages(@RequestParam("file") List<MultipartFile> files,
+                                          @RequestParam("path") List<String> paths,
+                                          @RequestParam("extension") List<String> extensions) throws IOException {
+        UserHeader userHeader = AuthenUtil.getUserHeader(requestHeader);
         ImageResponse response = new ImageResponse();
+        long userId = userTokenService.verifyUserAuthen(userHeader, response);
+        if (userId > 0) {
+            int length = files.size();
+            List<Image> imageList = new ArrayList<>();
+            Map<String, String> newUrls = new HashMap<>();
+            if (paths.size() == length) {
+                for (int i = 0; i < length; i++) {
 
-
-//        long userId = userTokenService.verifyUserAuthen(userHeader, response);
-//        if (userId>0) {
-//            List<Image> imageList = new ArrayList<>();
-//            for (MultipartFile file :
-//                    files) {
-//                Image image = new Image();
-//                image.setContent(new Binary(BsonBinarySubType.BINARY, file.getBytes()));
-//                imageList.add(image);
-//            }
-//            imgService.saveMultipImages(imageList);
-//
-//          Map<String, String> newUrls = new HashMap<>();
-//          imageInfos.forEach((imageInfo) -> {
-//            newUrls.put(imageInfo.getUrl(), PathUtil.generateSavingPath(userId, imageInfo.getImgType()));
-//          });
-//          response.setUrls(newUrls);
-//        }
-
+                    String extension = "";
+                    if (extensions.size() > i) {
+                        extension = extensions.get(i);
+                    }
+                    String newPath = PathUtil.generateSavingPath(userId, extension);
+                    Image image = new Image();
+                    image.setUrl(newPath);
+                    image.setContent(new Binary(BsonBinarySubType.BINARY, files.get(i).getBytes()));
+                    imageList.add(image);
+                    newUrls.put(paths.get(i), newPath);
+                }
+                imgService.saveMultipImages(imageList);
+            } else {
+                response.setCode("6001");
+                response.setMsg("MISSING IMAGE URL");
+                LOG.error("6001", "MISSING IMAGE URL");
+            }
+            response.setUrls(newUrls);
+        }
         return response;
     }
 }
