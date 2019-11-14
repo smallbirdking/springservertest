@@ -8,6 +8,8 @@ import com.example.demo.mongodb.entity.UserHeader;
 import com.example.demo.mongodb.entity.image.ImageResponse;
 import com.example.demo.mongodb.service.ImageService;
 import com.example.demo.mysql.service.UserTokenService;
+import org.apache.commons.collections4.CollectionUtils;
+import org.apache.commons.lang3.StringUtils;
 import org.bson.BsonBinarySubType;
 import org.bson.types.Binary;
 import org.slf4j.Logger;
@@ -38,7 +40,7 @@ public class ImageController {
     HttpServletRequest requestHeader;
 
     @RequestMapping("/find/one")
-    public byte[] find() {
+    public byte[] findOne() {
         return imgService.findOne().getContent().getData();
     }
 
@@ -48,10 +50,16 @@ public class ImageController {
         return imgService.findAll(id);
     }
 
+    @RequestMapping("/find/urls")
+    public ImageListData findByUrls(List<String> urls) {
+      LOG.info("find imgs by " + urls);
+      return imgService.findByUrls(urls);
+    }
+
     @PutMapping(value = "/upload/image")
     @ResponseBody
     public void save(String decrip, @RequestParam("uploaded_file") MultipartFile file) throws IOException {
-        System.out.println(file);
+        LOG.info("save img");
         Image image = new Image();
 
         image.setContent(new Binary(BsonBinarySubType.BINARY, file.getBytes()));
@@ -61,6 +69,7 @@ public class ImageController {
     @PutMapping(value = "/upload/multipimages")
     public ImageResponse saveMultipImages(@RequestParam("file") List<MultipartFile> files,
                                           @RequestParam("path") List<String> paths,
+                                          @RequestParam("md5Hex") List<String> md5Hexes,
                                           @RequestParam("extension") List<String> extensions) throws IOException {
         UserHeader userHeader = AuthenUtil.getUserHeader(requestHeader);
         ImageResponse response = new ImageResponse();
@@ -69,21 +78,30 @@ public class ImageController {
             int length = files.size();
             List<Image> imageList = new ArrayList<>();
             Map<String, String> newUrls = new HashMap<>();
-            if (paths.size() == length) {
+            if (paths.size() == length && md5Hexes.size() == length) {
                 for (int i = 0; i < length; i++) {
-
+                  String md5Id = md5Hexes.get(i);
+                  String newPath = "";
+                  if (StringUtils.isNotEmpty(md5Id)) {
+                    newPath = imgService.hasSameImage(md5Id);
+                  }
+                  if (StringUtils.isEmpty(md5Id)) {
                     String extension = "";
                     if (extensions.size() > i) {
-                        extension = extensions.get(i);
+                      extension = extensions.get(i);
                     }
-                    String newPath = PathUtil.generateSavingPath(userId, extension);
+                    newPath = PathUtil.generateSavingPath(userId, extension);
                     Image image = new Image();
                     image.setUrl(newPath);
                     image.setContent(new Binary(BsonBinarySubType.BINARY, files.get(i).getBytes()));
+                    image.setMD5Id(md5Id);
                     imageList.add(image);
-                    newUrls.put(paths.get(i), newPath);
+                  }
+                  newUrls.put(paths.get(i), newPath);
                 }
-                imgService.saveMultipImages(imageList);
+                if (CollectionUtils.isNotEmpty(imageList)){
+                  imgService.saveMultipImages(imageList);
+                }
             } else {
                 response.setCode("6001");
                 response.setMsg("MISSING IMAGE URL");

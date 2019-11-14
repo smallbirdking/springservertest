@@ -26,6 +26,12 @@ public class ImageServiceImpl implements ImageService {
     }
 
     @Override
+    public ImageListData findByUrls(List<String> urls) {
+      ImageListData all = imageDao.findByUrls(urls);
+      return all;
+    }
+
+    @Override
     public void save(Image file) {
         imageDao.saveImage(file);
     }
@@ -33,5 +39,10 @@ public class ImageServiceImpl implements ImageService {
     @Override
     public void saveMultipImages(List<Image> files) {
         imageDao.saveMultipImages(files);
+    }
+
+    @Override
+    public String hasSameImage(String md5Id) {
+      return imageDao.hasSameMD5IdInImage(md5Id);
     }
 }

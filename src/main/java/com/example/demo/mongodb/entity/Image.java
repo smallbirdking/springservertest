@@ -10,25 +10,36 @@ import org.springframework.stereotype.Repository;
 @Repository
 public class Image {
 
-    @Field("URL")
-    String url;
+  @Field("MD5ID")
+  String MD5Id;
 
-    @Field("DATA")
-    private Binary content; // 文件内容
+  @Field("URL")
+  String url;
 
-    public Binary getContent() {
-        return content;
-    }
+  @Field("DATA")
+  private Binary content; // 文件内容
 
-    public void setContent(Binary content) {
-        this.content = content;
-    }
+  public Binary getContent() {
+    return content;
+  }
 
-    public String getUrl() {
-        return url;
-    }
+  public void setContent(Binary content) {
+    this.content = content;
+  }
 
-    public void setUrl(String url) {
-        this.url = url;
-    }
+  public String getUrl() {
+    return url;
+  }
+
+  public void setUrl(String url) {
+    this.url = url;
+  }
+
+  public String getMD5Id() {
+    return MD5Id;
+  }
+
+  public void setMD5Id(String MD5Id) {
+    this.MD5Id = MD5Id;
+  }
 }

@@ -11,7 +11,11 @@ public interface ImageDao {
 
     public ImageListData findAll();
 
+    public ImageListData findByUrls(List<String> urls);
+
     public void saveImage(Image file);
 
     public void saveMultipImages(List<Image> files);
+
+    String hasSameMD5IdInImage(String md5Id);
 }
