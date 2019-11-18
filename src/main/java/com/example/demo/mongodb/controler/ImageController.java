@@ -23,7 +23,6 @@ import java.io.IOException;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
-import java.util.Map;
 
 @RestController
 @RequestMapping("/image")
@@ -77,7 +76,10 @@ public class ImageController {
         if (userId > 0) {
             int length = files.size();
             List<Image> imageList = new ArrayList<>();
-            Map<String, String> newUrls = new HashMap<>();
+            HashMap<String, String> newUrls = new HashMap<>();
+
+            List<String> oldPaths = new ArrayList<>();
+            List<String> newPaths = new ArrayList<>();
             if (paths.size() == length && md5Hexes.size() == length) {
                 for (int i = 0; i < length; i++) {
                   String md5Id = md5Hexes.get(i);
@@ -85,7 +87,7 @@ public class ImageController {
                   if (StringUtils.isNotEmpty(md5Id)) {
                     newPath = imgService.hasSameImage(md5Id);
                   }
-                  if (StringUtils.isEmpty(md5Id)) {
+                  if (StringUtils.isEmpty(newPath)) {
                     String extension = "";
                     if (extensions.size() > i) {
                       extension = extensions.get(i);
@@ -97,6 +99,8 @@ public class ImageController {
                     image.setMD5Id(md5Id);
                     imageList.add(image);
                   }
+//                  oldPaths.add(paths.get(i));
+//                  newPaths.add(newPath);
                   newUrls.put(paths.get(i), newPath);
                 }
                 if (CollectionUtils.isNotEmpty(imageList)){
@@ -108,6 +112,8 @@ public class ImageController {
                 LOG.error("6001", "MISSING IMAGE URL");
             }
             response.setUrls(newUrls);
+//            response.setNewPaths(newPaths);
+//            response.setOldPaths(oldPaths);
         }
         return response;
     }

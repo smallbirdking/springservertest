@@ -16,6 +16,8 @@ import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.RestController;
 
 import javax.servlet.http.HttpServletRequest;
+import java.text.ParseException;
+import java.text.SimpleDateFormat;
 import java.util.List;
 
 @RestController
@@ -43,14 +45,17 @@ public class ThreadController {
 //    }
 
     @RequestMapping(value = "/insert_thread/thread_content", method = RequestMethod.PUT)
-    public ThreadResponse saveThread(@RequestBody ThreadData threadContent) {
+    public ThreadResponse saveThread(@RequestBody ThreadData threadContent) throws ParseException {
         UserHeader userHeader = AuthenUtil.getUserHeader(requestHeader);
         ThreadResponse response = new ThreadResponse();
         long userId = userTokenService.verifyUserAuthen(userHeader, response);
         if (userId>0){
             Thread thread = new Thread();
             thread.setCreatedUserId(userId);
-            thread.setCreatedTime(threadContent.getCreatedTime());
+
+            SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
+//            sdf.parse(threadContent.getCreatedTime());
+            thread.setCreatedTime(sdf.parse(threadContent.getCreatedTime()));
             thread.setTrBody(threadContent.getContent());
             thread.setTrSubject(threadContent.getTitle());
             threadService.insertThread(thread);

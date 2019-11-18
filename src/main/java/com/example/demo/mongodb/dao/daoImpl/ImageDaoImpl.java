@@ -4,7 +4,6 @@ import com.example.demo.mongodb.dao.ImageDao;
 import com.example.demo.mongodb.entity.Image;
 import com.example.demo.mongodb.entity.ImageListData;
 import com.example.demo.mongodb.entity.ImageUpd;
-import org.apache.commons.lang3.StringUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.mongodb.core.MongoTemplate;
 import org.springframework.data.mongodb.core.query.Criteria;
@@ -95,7 +94,7 @@ public class ImageDaoImpl implements ImageDao {
       Query query = new Query(Criteria.where("MD5ID").is(md5Id));
       query.fields().include("URL");
       Image img = mongoTemplate.findOne(query, Image.class);
-      return StringUtils.isNotEmpty(img.getUrl()) ? img.getUrl() : null ;
+      return img != null ? img.getUrl() : null;
     }
 
 }
