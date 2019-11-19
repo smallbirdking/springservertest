@@ -45,6 +45,10 @@ public class Thread {
     @Field("TOPIC_LIST")
     private List topicList ;
 
+    /** 话题 */
+    @Field("IMAGE_LIST")
+    private List imageList ;
+
     /** 创建人 */
     public Long getCreatedUserId(){
         return this.createdUserId;
@@ -124,6 +128,16 @@ public class Thread {
     /** 话题 */
     public void setTopicList(List topicList){
         this.topicList = topicList;
+    }
+
+    /** 图片列表 */
+    public List getImageList() {
+      return imageList;
+    }
+
+    /** 图片列表 */
+    public void setImageList(List imageList) {
+      this.imageList = imageList;
     }
 
     @Override
