@@ -17,10 +17,8 @@ import org.springframework.web.bind.annotation.RestController;
 
 import javax.servlet.http.HttpServletRequest;
 import java.text.ParseException;
-import java.text.SimpleDateFormat;
 import java.util.Arrays;
 import java.util.List;
-import java.util.Locale;
 
 @RestController
 @RequestMapping("/thread")
@@ -54,8 +52,8 @@ public class ThreadController {
         if (userId>0) {
             Thread thread = new Thread();
             thread.setCreatedUserId(userId);
-            SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss Z", Locale.getDefault());
-            thread.setCreatedTime(sdf.parse(threadContent.getCreatedTime()));
+//            SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss Z", Locale.getDefault());
+            thread.setCreatedTime(threadContent.getCreatedTime());//sdf.parse(threadContent.getCreatedTime()));
             thread.setTrBody(threadContent.getContent());
             thread.setTrSubject(threadContent.getTitle());
             thread.setAdminList(Arrays.asList(userId));

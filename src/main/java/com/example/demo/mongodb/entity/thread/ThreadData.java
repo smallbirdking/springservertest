@@ -1,12 +1,13 @@
 package com.example.demo.mongodb.entity.thread;
 
+import java.util.Date;
 import java.util.List;
 
 public class ThreadData {
     String title;
     String content;
-//    @DateTimeFormat(pattern = "yyyy-MM-dd HH:mm:ss")
-    String createdTime;
+//    @DateTimeFormat(pattern = "yyyy-MM-dd'T'HH:mm:ss.SSSZ")
+    Date createdTime;
     List<String> imgUris;
 
     public String getTitle() {
@@ -25,11 +26,11 @@ public class ThreadData {
         this.content = content;
     }
 
-    public String getCreatedTime() {
+    public Date getCreatedTime() {
       return createdTime;
     }
 
-    public void setCreatedTime(String createdTime) {
+    public void setCreatedTime(Date createdTime) {
       this.createdTime = createdTime;
     }
 
