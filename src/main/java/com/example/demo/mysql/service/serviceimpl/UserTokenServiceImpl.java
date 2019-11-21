@@ -2,6 +2,7 @@ package com.example.demo.mysql.service.serviceimpl;
 
 import com.example.demo.Util.LoginUtil;
 import com.example.demo.entity.BaseResponse;
+import com.example.demo.entity.LoginException;
 import com.example.demo.mongodb.entity.UserHeader;
 import com.example.demo.mysql.entity.UserTokenEntity;
 import com.example.demo.mysql.repository.UserTokenEntityRepository;
@@ -133,7 +134,7 @@ public class UserTokenServiceImpl implements UserTokenService {
                 if (!newUserTokenEntity.isPresent()) {
                     //Error need login
                     userId = -1;
-                    //throw new LoginException("NEED LOGIN", "1000");
+                    throw new LoginException("NEED LOGIN", "1000");
                 }
                 response.setCode("0001");
                 response.setMsg("NEED REFRESH TOKEN");

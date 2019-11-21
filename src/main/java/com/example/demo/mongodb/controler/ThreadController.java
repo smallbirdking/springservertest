@@ -1,12 +1,12 @@
 package com.example.demo.mongodb.controler;
 
-import com.example.demo.Util.AuthenUtil;
-import com.example.demo.mongodb.entity.UserHeader;
+import com.example.demo.mongodb.entity.thread.BrefThread;
+import com.example.demo.mongodb.entity.thread.RecommendedThreadsResponse;
 import com.example.demo.mongodb.entity.thread.Thread;
 import com.example.demo.mongodb.entity.thread.ThreadData;
 import com.example.demo.mongodb.entity.thread.ThreadResponse;
+import com.example.demo.mongodb.service.RecommendedProviderService;
 import com.example.demo.mongodb.service.ThreadService;
-import com.example.demo.mysql.service.UserTokenService;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -15,24 +15,20 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.RestController;
 
-import javax.servlet.http.HttpServletRequest;
 import java.text.ParseException;
 import java.util.Arrays;
 import java.util.List;
 
 @RestController
 @RequestMapping("/thread")
-public class ThreadController {
+public class ThreadController extends BaseController {
     private static final Logger LOG = LoggerFactory.getLogger(ThreadController.class);
 
     @Autowired
     private ThreadService threadService;
 
     @Autowired
-    private UserTokenService userTokenService;
-
-    @Autowired
-    HttpServletRequest requestHeader;
+    private RecommendedProviderService recommendedProviderService;
 
     @RequestMapping("/find_userid")
     public List<Thread> findByUserId(Long userId) {
@@ -46,9 +42,8 @@ public class ThreadController {
 
     @RequestMapping(value = "/insert_thread/thread_content", method = RequestMethod.PUT)
     public ThreadResponse saveThread(@RequestBody ThreadData threadContent) throws ParseException {
-        UserHeader userHeader = AuthenUtil.getUserHeader(requestHeader);
         ThreadResponse response = new ThreadResponse();
-        long userId = userTokenService.verifyUserAuthen(userHeader, response);
+        long userId = authenticate(response);
         if (userId>0) {
             Thread thread = new Thread();
             thread.setCreatedUserId(userId);
@@ -63,4 +58,22 @@ public class ThreadController {
         return response;
     }
 
+    @RequestMapping(value = "/insert_thread/thread_content", method = RequestMethod.GET)
+    public RecommendedThreadsResponse collectRecommendedBriefThreads() {
+      RecommendedThreadsResponse response = new RecommendedThreadsResponse();
+      if (authenticate(response) > 0) {
+        List<BrefThread> recommendedBriefThreads = recommendedProviderService.getRecommendedBriefThreads();
+        for (BrefThread thread : recommendedBriefThreads) {
+
+        }
+      }
+      return response;
+    }
+
+    @RequestMapping()
+    public long defaultCall() {
+      //Call the default method directly, or use the 'forward' String. Example:
+      System.out.println("default method");
+      return -1;
+    }
 }
