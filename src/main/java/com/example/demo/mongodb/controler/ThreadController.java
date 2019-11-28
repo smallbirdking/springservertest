@@ -58,7 +58,7 @@ public class ThreadController extends BaseController {
         return response;
     }
 
-    @RequestMapping(value = "/insert_thread/thread_content", method = RequestMethod.GET)
+    @RequestMapping(value = "/recommended/bref_thread", method = RequestMethod.GET)
     public RecommendedThreadsResponse collectRecommendedBriefThreads() {
       RecommendedThreadsResponse response = new RecommendedThreadsResponse();
       if (authenticate(response) > 0) {
@@ -66,6 +66,7 @@ public class ThreadController extends BaseController {
         for (BrefThread thread : recommendedBriefThreads) {
 
         }
+        response.setRecommendedBriefThreads(recommendedBriefThreads);
       }
       return response;
     }
