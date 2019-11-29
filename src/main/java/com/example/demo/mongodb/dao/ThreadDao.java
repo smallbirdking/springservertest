@@ -9,4 +9,6 @@ public interface ThreadDao {
     void save(Thread thread);
 
     List<Thread> findByUserId(Long id);
+
+    List<Thread> collectRecommendedBriefThreads(int limit);
 }

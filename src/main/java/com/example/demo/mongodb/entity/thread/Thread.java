@@ -1,6 +1,7 @@
 package com.example.demo.mongodb.entity.thread;
 
 import org.springframework.data.annotation.CreatedBy;
+import org.springframework.data.annotation.Id;
 import org.springframework.data.mongodb.core.mapping.Document;
 import org.springframework.data.mongodb.core.mapping.Field;
 import org.springframework.stereotype.Repository;
@@ -13,6 +14,8 @@ import java.util.List;
 @Repository
 public class Thread {
 
+    @Id
+    private String id;
     /** 创建人 */
     @Field("CREATED_USER_ID")
     private Long createdUserId ;
@@ -45,9 +48,21 @@ public class Thread {
     @Field("TOPIC_LIST")
     private List topicList ;
 
-    /** 话题 */
+    /** 图片URL */
     @Field("IMAGE_LIST")
     private List imageList ;
+
+    /** 热度 */
+    @Field("HEAT")
+    private int heat ;
+
+    public String getId() {
+        return id;
+    }
+
+    public void setId(String id) {
+        this.id = id;
+    }
 
     /** 创建人 */
     public Long getCreatedUserId(){
@@ -138,6 +153,14 @@ public class Thread {
     /** 图片列表 */
     public void setImageList(List imageList) {
       this.imageList = imageList;
+    }
+
+    public int getHeat() {
+        return heat;
+    }
+
+    public void setHeat(int heat) {
+        this.heat = heat;
     }
 
     @Override
