@@ -33,6 +33,15 @@ public class InsertDataTest {
     private ThreadDao threadDao;
 
     @Test
+    public void TestgetThreadByThreadId() {
+        String threadId = "5dd470d5afb108226bfcae09";
+
+        Thread thread = threadDao.findByThreadId(threadId);
+
+        System.out.println("thread " + thread);
+    }
+
+    @Test
     public void testInsertUsers() {
         List<User> users = new ArrayList<>();
         User user1 = new User();

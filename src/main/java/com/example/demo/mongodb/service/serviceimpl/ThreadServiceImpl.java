@@ -22,4 +22,9 @@ public class ThreadServiceImpl implements ThreadService {
     public List<Thread> findByUserId(Long userId) {
         return threadDao.findByUserId(userId);
     }
+
+    @Override
+    public Thread findByThreadId(String threadId) {
+        return threadDao.findByThreadId(threadId);
+    }
 }

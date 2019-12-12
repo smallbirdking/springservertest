@@ -21,6 +21,7 @@ import org.springframework.web.multipart.MultipartFile;
 import javax.servlet.http.HttpServletRequest;
 import java.io.IOException;
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.HashMap;
 import java.util.List;
 
@@ -50,9 +51,9 @@ public class ImageController {
     }
 
     @RequestMapping("/find/urls")
-    public ImageListData findByUrls(List<String> urls) {
+    public ImageListData findByUrls(@RequestParam("urls[]") String[] urls) {
       LOG.info("find imgs by " + urls);
-      return imgService.findByUrls(urls);
+      return imgService.findByUrls(Arrays.asList(urls));
     }
 
     @PutMapping(value = "/upload/image")

@@ -3,7 +3,6 @@ package com.example.demo.mongodb.controler;
 import com.example.demo.mongodb.entity.thread.BrefThread;
 import com.example.demo.mongodb.entity.thread.RecommendedThreadsResponse;
 import com.example.demo.mongodb.entity.thread.Thread;
-import com.example.demo.mongodb.entity.thread.ThreadData;
 import com.example.demo.mongodb.entity.thread.ThreadResponse;
 import com.example.demo.mongodb.service.RecommendedProviderService;
 import com.example.demo.mongodb.service.ThreadService;
@@ -35,24 +34,30 @@ public class ThreadController extends BaseController {
         return threadService.findByUserId(userId);
     }
 
+    @RequestMapping("/find/threadid")
+    public Thread findByThreadId(String threadId) {
+        return threadService.findByThreadId(threadId);
+    }
+
+
 //    @RequestMapping(value= "/insert_thread/thread_content", method = RequestMethod.PUT)
 //    public void saveThread(@RequestBody Thread thread) {
 //        threadService.insertThread(thread);
 //    }
 
     @RequestMapping(value = "/insert_thread/thread_content", method = RequestMethod.PUT)
-    public ThreadResponse saveThread(@RequestBody ThreadData threadContent) throws ParseException {
+    public ThreadResponse saveThread(@RequestBody Thread thread) throws ParseException {
         ThreadResponse response = new ThreadResponse();
         long userId = authenticate(response);
         if (userId>0) {
-            Thread thread = new Thread();
+            //Thread thread = new Thread();
             thread.setCreatedUserId(userId);
 //            SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss Z", Locale.getDefault());
-            thread.setCreatedTime(threadContent.getCreatedTime());//sdf.parse(threadContent.getCreatedTime()));
-            thread.setTrBody(threadContent.getContent());
-            thread.setTrSubject(threadContent.getTitle());
+//            thread.setCreatedTime(thread.getCreatedTime());//sdf.parse(threadContent.getCreatedTime()));
+//            thread.setTrBody(thread.getTrBody());
+//            thread.setTrSubject(thread.getTrSubject());
             thread.setAdminList(Arrays.asList(userId));
-            thread.setImageList(threadContent.getImgUris());
+//            thread.setImageList(thread.getImageList());
             threadService.insertThread(thread);
         }
         return response;
@@ -70,6 +75,8 @@ public class ThreadController extends BaseController {
       }
       return response;
     }
+
+
 
     @RequestMapping()
     public long defaultCall() {

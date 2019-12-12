@@ -11,4 +11,6 @@ public interface ThreadDao {
     List<Thread> findByUserId(Long id);
 
     List<Thread> collectRecommendedBriefThreads(int limit);
+
+    Thread findByThreadId(String threadId);
 }

@@ -10,4 +10,6 @@ public interface ThreadService {
 
     List<Thread> findByUserId(Long userId);
 
+    Thread findByThreadId(String threadId);
+
 }

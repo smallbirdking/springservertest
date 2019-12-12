@@ -10,6 +10,7 @@ public class BrefThread {
     private String trSubject ;
     private List imageList ;
     private int heat;
+    private String createdUserName ;
 
     public String getThreadId() {
         return threadId;
@@ -57,5 +58,13 @@ public class BrefThread {
 
     public void setHeat(int heat) {
         this.heat = heat;
+    }
+
+    public String getCreatedUserName() {
+        return createdUserName;
+    }
+
+    public void setCreatedUserName(String createdUserName) {
+        this.createdUserName = createdUserName;
     }
 }

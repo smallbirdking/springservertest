@@ -2,6 +2,7 @@ package com.example.demo.mongodb.dao.daoImpl;
 
 import com.example.demo.mongodb.dao.ThreadDao;
 import com.example.demo.mongodb.entity.thread.Thread;
+import org.bson.types.ObjectId;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Sort;
 import org.springframework.data.mongodb.core.MongoTemplate;
@@ -37,5 +38,11 @@ public class ThreadDaoImpl implements ThreadDao {
         query.with(new Sort(Sort.Direction.DESC, "CREATED_TIME"));
         query.limit(limit);
         return mongoTemplate.find(query, Thread.class, "Thread");
+    }
+
+    @Override
+    public Thread findByThreadId(String threadId) {
+        Query query = new Query(Criteria.where("id").is(new ObjectId(threadId)));
+        return mongoTemplate.findOne(query, Thread.class, "Thread");
     }
 }
