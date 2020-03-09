@@ -20,6 +20,7 @@ public class UserEntityController {
         return list;
     }
 
+
 //    @RequestMapping(value = "/")
 //    @ResponseBody
 //    public List<UserEntity> findUsersByUserName(String userName){

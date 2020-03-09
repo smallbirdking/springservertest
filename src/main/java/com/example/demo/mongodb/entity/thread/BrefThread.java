@@ -6,6 +6,8 @@ import java.util.List;
 public class BrefThread {
     private String threadId ;
     private Long createdUserId ;
+    private List participants ;
+    private List organizers;
     private Date createdTime ;
     private String trSubject ;
     private List imageList ;
@@ -66,5 +68,21 @@ public class BrefThread {
 
     public void setCreatedUserName(String createdUserName) {
         this.createdUserName = createdUserName;
+    }
+
+    public List getParticipants() {
+        return participants;
+    }
+
+    public void setParticipants(List participants) {
+        this.participants = participants;
+    }
+
+    public List getOrganizers() {
+        return organizers;
+    }
+
+    public void setOrganizers(List organizers) {
+        this.organizers = organizers;
     }
 }

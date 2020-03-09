@@ -65,9 +65,9 @@ public class UserEntityTest {
     Timestamp time2 = new Timestamp(new Date().getTime());
 
     UserEntity userEntity = new UserEntity();
-    userEntity.setUserName("sbk0");
+    userEntity.setUserName("jinhong");
     userEntity.setUserPassword("123");
-//    userEntity.setCreatedTime(time2);
+    userEntity.setCreatedTime(time2);
     Optional<UserEntity> userEntityRs = userEntityService.insertUser(userEntity);
 
     printUser(userEntityRs.get());
@@ -75,16 +75,23 @@ public class UserEntityTest {
 
   @Test
   public void testSaveUserProfile() {
-    long id = 1;
+    long id = 9;
     Optional<UserEntity> allUser = userEntityService.findByUserId(id);
     UserProfileEntity userProfileEntity = new UserProfileEntity();
-    userProfileEntity.setFirstName("YU");
-    userProfileEntity.setLastName("W");
+    userProfileEntity.setFirstName("Anji");
+    userProfileEntity.setLastName("ZHU");
     // userProfileEntity.setNickName("sbk");
     // userProfileEntity.setPassword("123");
     userProfileEntity.setUserByUserId(allUser.get());
     Optional<UserProfileEntity> userProfileEntityRs = userProfileEntityService.insertUserProfile(userProfileEntity);
 
+    printUserProfile(userProfileEntityRs.get());
+  }
+
+  @Test
+  public void testAddHeadPortraitInUserProfile() {
+    long id = 1;
+    Optional<UserProfileEntity> userProfileEntityRs = userProfileEntityService.updateHeadPortrait(id, "");
     printUserProfile(userProfileEntityRs.get());
   }
 

@@ -7,6 +7,7 @@ import com.example.demo.mongodb.entity.ImageListData;
 import com.example.demo.mongodb.entity.UserHeader;
 import com.example.demo.mongodb.entity.image.ImageResponse;
 import com.example.demo.mongodb.service.ImageService;
+import com.example.demo.mysql.service.UserProfileEntityService;
 import com.example.demo.mysql.service.UserTokenService;
 import org.apache.commons.collections4.CollectionUtils;
 import org.apache.commons.lang3.StringUtils;
@@ -35,6 +36,9 @@ public class ImageController {
 
     @Autowired
     private UserTokenService userTokenService;
+
+    @Autowired
+    private UserProfileEntityService userProfileEntityService;
 
     @Autowired
     HttpServletRequest requestHeader;
@@ -66,6 +70,38 @@ public class ImageController {
         imgService.save(image);
     }
 
+    @PutMapping(value = "/upload/icon")
+    @ResponseBody
+    public ImageResponse saveIcon(@RequestParam("file") MultipartFile file,
+                                  @RequestParam("path") String path,
+                                  @RequestParam("md5Hex") String md5Hex,
+                                  @RequestParam("extension") String extension) throws IOException {
+        LOG.info("save img");
+        UserHeader userHeader = AuthenUtil.getUserHeader(requestHeader);
+        ImageResponse response = new ImageResponse();
+        long userId = userTokenService.verifyUserAuthen(userHeader, response);
+        if (userId > 0) {
+            String newPath = "";
+            HashMap<String, String> newUrls = new HashMap<>();
+            if (StringUtils.isNotEmpty(md5Hex)) {
+                newPath = imgService.hasSameImage(md5Hex);
+            }
+            if (StringUtils.isEmpty(newPath)) {
+                //String extension = "";
+                newPath = PathUtil.generateSavingIconPath(userId, extension);
+                Image image = new Image();
+                image.setUrl(newPath);
+                image.setContent(new Binary(BsonBinarySubType.BINARY, file.getBytes()));
+                image.setMD5Id(md5Hex);
+                imgService.save(image);
+                userProfileEntityService.updateHeadPortrait(userId, newPath);
+            }
+            newUrls.put(path, newPath);
+            response.setUrls(newUrls);
+        }
+        return response;
+    }
+
     @PutMapping(value = "/upload/multipimages")
     public ImageResponse saveMultipImages(@RequestParam("file") List<MultipartFile> files,
                                           @RequestParam("path") List<String> paths,
@@ -78,9 +114,6 @@ public class ImageController {
             int length = files.size();
             List<Image> imageList = new ArrayList<>();
             HashMap<String, String> newUrls = new HashMap<>();
-
-            List<String> oldPaths = new ArrayList<>();
-            List<String> newPaths = new ArrayList<>();
             if (paths.size() == length && md5Hexes.size() == length) {
                 for (int i = 0; i < length; i++) {
                   String md5Id = md5Hexes.get(i);
@@ -100,8 +133,6 @@ public class ImageController {
                     image.setMD5Id(md5Id);
                     imageList.add(image);
                   }
-//                  oldPaths.add(paths.get(i));
-//                  newPaths.add(newPath);
                   newUrls.put(paths.get(i), newPath);
                 }
                 if (CollectionUtils.isNotEmpty(imageList)){
@@ -113,8 +144,6 @@ public class ImageController {
                 LOG.error("6001", "MISSING IMAGE URL");
             }
             response.setUrls(newUrls);
-//            response.setNewPaths(newPaths);
-//            response.setOldPaths(oldPaths);
         }
         return response;
     }

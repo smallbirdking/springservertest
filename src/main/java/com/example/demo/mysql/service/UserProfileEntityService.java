@@ -19,4 +19,6 @@ public interface UserProfileEntityService {
     Stream<UserProfileEntity> findByUserID(Long userId);
 
     Page<UserProfileEntity> findByFirstName(@Param("firstname") String firstName, Pageable sort);
+
+    Optional<UserProfileEntity> updateHeadPortrait(Long userId, String portraitUrl);
 }

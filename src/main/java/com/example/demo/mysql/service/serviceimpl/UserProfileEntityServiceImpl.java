@@ -5,6 +5,7 @@ import com.example.demo.mysql.entity.UserProfileEntity;
 import com.example.demo.mysql.repository.UserEntityRepository;
 import com.example.demo.mysql.repository.UserProfileEntityRepository;
 import com.example.demo.mysql.service.UserProfileEntityService;
+import org.apache.commons.collections4.CollectionUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
@@ -47,4 +48,18 @@ public class UserProfileEntityServiceImpl implements UserProfileEntityService {
         Page<UserProfileEntity> userProfiles = userProfileEntityRepository.findByFirstName(firstName, sort);
         return userProfiles;
     }
+
+    @Override
+    public Optional<UserProfileEntity> updateHeadPortrait(Long userId, String portraitUrl) {
+        List<UserProfileEntity> byUserID = userProfileEntityRepository.findByUserID(userId);
+        if (CollectionUtils.isNotEmpty(byUserID)) {
+            // TODO for now only one profile could be created
+            UserProfileEntity userProfileEntity = byUserID.get(0);
+            userProfileEntity.setHeadPortrait(portraitUrl);
+            userProfileEntityRepository.save(userProfileEntity);
+            return Optional.of(userProfileEntity);
+        }
+        return Optional.empty();
+    }
+
 }

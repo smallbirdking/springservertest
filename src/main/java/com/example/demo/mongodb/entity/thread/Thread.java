@@ -6,8 +6,7 @@ import org.springframework.data.mongodb.core.mapping.Document;
 import org.springframework.data.mongodb.core.mapping.Field;
 import org.springframework.stereotype.Repository;
 
-import java.util.Date;
-import java.util.List;
+import java.util.*;
 
 
 @Document(collection = "Thread")
@@ -43,7 +42,7 @@ public class Thread {
     private List mentionedUserList ;
     /** 管理员列表 */
     @Field("ADMIN_LIST")
-    private List adminList ;
+    private Set<Long> adminList ;
     /** 话题 */
     @Field("TOPIC_LIST")
     private List topicList ;
@@ -55,6 +54,10 @@ public class Thread {
     /** 热度 */
     @Field("HEAT")
     private int heat ;
+
+    /** 参与者 */
+    @Field("PARTICIPANTS")
+    private Set<Long> participants ;
 
     public String getId() {
         return id;
@@ -129,11 +132,11 @@ public class Thread {
         this.mentionedUserList = mentionedUserList;
     }
     /** 管理员列表 */
-    public List getAdminList(){
+    public Set<Long> getAdminList(){
         return this.adminList;
     }
     /** 管理员列表 */
-    public void setAdminList(List adminList){
+    public void setAdminList(Set<Long> adminList){
         this.adminList = adminList;
     }
     /** 话题 */
@@ -161,6 +164,28 @@ public class Thread {
 
     public void setHeat(int heat) {
         this.heat = heat;
+    }
+
+    public Set<Long> getParticipants() {
+        return participants;
+    }
+
+    public void setParticipants(Set<Long> participants) {
+        this.participants = participants;
+    }
+
+    public void addParticipant(Long participant) {
+        if (this.participants == null) {
+            this.participants = new HashSet<>();
+        }
+        this.participants.add(participant);
+    }
+
+    public void removeParticipant(Long participant) {
+        if (this.participants == null) {
+            return;
+        }
+        this.participants.remove(participant);
     }
 
     @Override

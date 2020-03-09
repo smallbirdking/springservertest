@@ -24,6 +24,7 @@ public class UserProfileEntity {
     private Integer sex;
     private UserEntity userByUserId;
     private Timestamp updatedTime;
+    private String headPortrait;
 
     @Id
     @Column(name = "ID")
@@ -181,5 +182,15 @@ public class UserProfileEntity {
 
     public void setUpdatedTime(Timestamp updatedTime) {
         this.updatedTime = updatedTime;
+    }
+
+    @Basic
+    @Column(name = "HEAD_PORTRAIT")
+    public String getHeadPortrait() {
+        return headPortrait;
+    }
+
+    public void setHeadPortrait(String headPortrait) {
+        this.headPortrait = headPortrait;
     }
 }
