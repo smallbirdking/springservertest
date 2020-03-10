@@ -1,6 +1,6 @@
 package com.example.demo.mysql.service;
 
-import com.example.demo.mysql.entity.CommentEntity;
+import com.example.demo.mysql.entity.comment.CommentEntity;
 
 import java.util.List;
 import java.util.Optional;
@@ -15,4 +15,8 @@ public interface CommentService {
     int deleteComment(long commentId);
 
     int revertComment(long commentId);
+
+    Long getPrimeCommentAmount(String threadId);
+
+    Long getSubCommentAmount(String threadId, long lastCommentId);
 }

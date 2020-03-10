@@ -1,4 +1,4 @@
-package com.example.demo.mysql.entity;
+package com.example.demo.mysql.entity.comment;
 
 import javax.persistence.*;
 import java.sql.Timestamp;
@@ -13,7 +13,8 @@ public class CommentEntity {
     private Timestamp createdTime;
     private Long toReplyUserId;
     private Long lastCommentId;
-    private String status;
+    private int status;
+    private int agreement;
 
     @Id
     @Column(name = "ID")
@@ -87,12 +88,22 @@ public class CommentEntity {
 
     @Basic
     @Column(name = "STATUS")
-    public String getStatus() {
+    public int getStatus() {
         return status;
     }
 
-    public void setStatus(String status) {
+    public void setStatus(int status) {
         this.status = status;
+    }
+
+    @Basic
+    @Column(name = "AGREEMENT")
+    public int getAgreement() {
+        return agreement;
+    }
+
+    public void setAgreement(int agreement) {
+        this.agreement = agreement;
     }
 
     @Override
@@ -103,6 +114,8 @@ public class CommentEntity {
         CommentEntity that = (CommentEntity) o;
 
         if (id != that.id) return false;
+        if (status != that.status) return false;
+        if (agreement != that.agreement) return false;
         if (threadId != null ? !threadId.equals(that.threadId) : that.threadId != null) return false;
         if (content != null ? !content.equals(that.content) : that.content != null) return false;
         if (userId != null ? !userId.equals(that.userId) : that.userId != null) return false;
@@ -111,7 +124,6 @@ public class CommentEntity {
             return false;
         if (lastCommentId != null ? !lastCommentId.equals(that.lastCommentId) : that.lastCommentId != null)
             return false;
-        if (status != null ? !status.equals(that.status) : that.status != null) return false;
 
         return true;
     }
@@ -125,7 +137,8 @@ public class CommentEntity {
         result = 31 * result + (createdTime != null ? createdTime.hashCode() : 0);
         result = 31 * result + (toReplyUserId != null ? toReplyUserId.hashCode() : 0);
         result = 31 * result + (lastCommentId != null ? lastCommentId.hashCode() : 0);
-        result = 31 * result + (status != null ? status.hashCode() : 0);
+        result = 31 * result + status;
+        result = 31 * result + agreement;
         return result;
     }
 }

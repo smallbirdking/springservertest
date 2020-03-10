@@ -1,6 +1,6 @@
 package com.example.demo.mysql.repository;
 
-import com.example.demo.mysql.entity.CommentEntity;
+import com.example.demo.mysql.entity.comment.CommentEntity;
 import org.springframework.data.jpa.repository.Modifying;
 import org.springframework.data.jpa.repository.Query;
 import org.springframework.data.repository.CrudRepository;
@@ -25,5 +25,5 @@ public interface CommentEntityRepository extends CrudRepository<CommentEntity,Lo
     @Transactional()
     @Modifying
     @Query("UPDATE CommentEntity c SET c.status = :status WHERE c.id = :commentId")
-    int updateStatus(@Param("commentId") long id, @Param("status") String status);
+    int updateStatus(@Param("commentId") long id, @Param("status") int status);
 }
