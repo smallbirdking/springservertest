@@ -2,27 +2,29 @@ package com.example.demo.mysql.service.serviceimpl;
 
 import com.example.demo.mysql.entity.comment.CommentEntity;
 import com.example.demo.mysql.repository.CommentEntityRepository;
-import com.example.demo.mysql.service.CommentService;
+import com.example.demo.mysql.service.CommentEntityService;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.stereotype.Service;
 
 import java.util.List;
 import java.util.Optional;
 
-public class CommentServiceImpl implements CommentService {
+@Service("commentEntityService")
+public class CommentEntityServiceImpl implements CommentEntityService {
+    public static final int COMMENT_DEFAUT_SHOWING_NUMBER = 10;
+    public static final int SUB_COMMENT_DEFAUT_SHOWING_NUMBER = 5;
+    public static final int DELETE_STATUS = 2;
+    public static final int NORMAL_STATUS = 1;
     @Autowired
     private CommentEntityRepository commentEntityRepository;
     @Override
     public List<CommentEntity> findCommentsByThreadId(String threadId, int begin) {
-        List<CommentEntity> primeComments = commentEntityRepository.findPrimeCommentByThreadID(threadId, begin, begin + 10);
-        for (CommentEntity commentEntity : primeComments) {
-            List<CommentEntity> subComments = commentEntityRepository.findSubCommentByThreadID(threadId, commentEntity.getLastCommentId(), begin, begin + 10);
-        }
-        return null;
+        return commentEntityRepository.findPrimeCommentByThreadID(threadId, begin, begin + COMMENT_DEFAUT_SHOWING_NUMBER);
     }
 
     @Override
     public List<CommentEntity> findSubCommentsByThreadId(String threadId, long lastCommentId, int begin) {
-        return commentEntityRepository.findSubCommentByThreadID(threadId, lastCommentId, begin, begin+10);
+        return commentEntityRepository.findSubCommentByThreadID(threadId, lastCommentId, begin, begin+ SUB_COMMENT_DEFAUT_SHOWING_NUMBER);
     }
 
     @Override
@@ -33,21 +35,21 @@ public class CommentServiceImpl implements CommentService {
 
     @Override
     public int deleteComment(long commentId) {
-        return commentEntityRepository.updateStatus(commentId, 2);
+        return commentEntityRepository.updateStatus(commentId, DELETE_STATUS);
     }
 
     @Override
     public int revertComment(long commentId) {
-        return commentEntityRepository.updateStatus(commentId, 1);
+        return commentEntityRepository.updateStatus(commentId, NORMAL_STATUS);
     }
 
     @Override
-    public Long getPrimeCommentAmount(String threadId) {
+    public int getPrimeCommentAmount(String threadId) {
         return commentEntityRepository.countPrimeCommentAmount(threadId);
     }
 
     @Override
-    public Long getSubCommentAmount(String threadId, long lastCommentId) {
+    public int getSubCommentAmount(String threadId, long lastCommentId) {
         return commentEntityRepository.countSubCommentAmount(threadId, lastCommentId);
     }
 }

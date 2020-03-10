@@ -17,10 +17,10 @@ public interface CommentEntityRepository extends CrudRepository<CommentEntity,Lo
     List<CommentEntity> findSubCommentByThreadID(String threadId, long lastCommentId, int begin, int end);
 
     @Query("SELECT COUNT(c) FROM CommentEntity c WHERE c.threadId = ?1 and c.lastCommentId is null")
-    Long countPrimeCommentAmount(String threadId);
+    int countPrimeCommentAmount(String threadId);
 
     @Query("SELECT COUNT(c) FROM CommentEntity c WHERE c.threadId = ?1 and c.lastCommentId = ?2")
-    Long countSubCommentAmount(String threadId, long lastCommentId);
+    int countSubCommentAmount(String threadId, long lastCommentId);
 
     @Transactional()
     @Modifying

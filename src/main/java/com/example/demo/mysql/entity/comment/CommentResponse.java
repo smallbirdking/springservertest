@@ -2,23 +2,25 @@ package com.example.demo.mysql.entity.comment;
 
 import com.example.demo.entity.BaseResponse;
 
+import java.util.List;
+
 public class CommentResponse extends BaseResponse {
-    private int totalAmount;
-//    private List<CommentDetailBean> list;
+  private int totalAmount;
+  private List<CommentDetail> commentList;
 
-    public int getTotalAmount() {
-        return totalAmount;
-    }
+  public int getTotalAmount() {
+    return totalAmount;
+  }
 
-    public void setTotalAmount(int totalAmount) {
-        this.totalAmount = totalAmount;
-    }
+  public void setTotalAmount(int totalAmount) {
+    this.totalAmount = totalAmount;
+  }
 
-//    public void setList(List<CommentDetailBean> list) {
-//        this.list = list;
-//    }
-//    public List<CommentDetailBean> getList() {
-//        return list;
-//    }
+  public List<CommentDetail> getCommentList() {
+    return commentList;
+  }
 
+  public void setCommentList(List<CommentDetail> commentList) {
+    this.commentList = commentList;
+  }
 }

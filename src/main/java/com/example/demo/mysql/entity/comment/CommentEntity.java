@@ -9,7 +9,7 @@ public class CommentEntity {
     private long id;
     private String threadId;
     private String content;
-    private String userId;
+    private long userId;
     private Timestamp createdTime;
     private Long toReplyUserId;
     private Long lastCommentId;
@@ -48,11 +48,11 @@ public class CommentEntity {
 
     @Basic
     @Column(name = "USER_ID")
-    public String getUserId() {
+    public long getUserId() {
         return userId;
     }
 
-    public void setUserId(String userId) {
+    public void setUserId(long userId) {
         this.userId = userId;
     }
 
@@ -118,7 +118,7 @@ public class CommentEntity {
         if (agreement != that.agreement) return false;
         if (threadId != null ? !threadId.equals(that.threadId) : that.threadId != null) return false;
         if (content != null ? !content.equals(that.content) : that.content != null) return false;
-        if (userId != null ? !userId.equals(that.userId) : that.userId != null) return false;
+        if (userId != that.userId) return false;
         if (createdTime != null ? !createdTime.equals(that.createdTime) : that.createdTime != null) return false;
         if (toReplyUserId != null ? !toReplyUserId.equals(that.toReplyUserId) : that.toReplyUserId != null)
             return false;
@@ -133,7 +133,7 @@ public class CommentEntity {
         int result = (int) (id ^ (id >>> 32));
         result = 31 * result + (threadId != null ? threadId.hashCode() : 0);
         result = 31 * result + (content != null ? content.hashCode() : 0);
-        result = 31 * result + (userId != null ? userId.hashCode() : 0);
+        result = 31 * result + (int) (userId ^ (userId >>> 32));
         result = 31 * result + (createdTime != null ? createdTime.hashCode() : 0);
         result = 31 * result + (toReplyUserId != null ? toReplyUserId.hashCode() : 0);
         result = 31 * result + (lastCommentId != null ? lastCommentId.hashCode() : 0);

@@ -5,7 +5,7 @@ import com.example.demo.mysql.entity.comment.CommentEntity;
 import java.util.List;
 import java.util.Optional;
 
-public interface CommentService {
+public interface CommentEntityService {
     List<CommentEntity> findCommentsByThreadId(String threadId, int begin);
 
     List<CommentEntity> findSubCommentsByThreadId(String threadId, long lastCommentId, int begin);
@@ -16,7 +16,7 @@ public interface CommentService {
 
     int revertComment(long commentId);
 
-    Long getPrimeCommentAmount(String threadId);
+    int getPrimeCommentAmount(String threadId);
 
-    Long getSubCommentAmount(String threadId, long lastCommentId);
+    int getSubCommentAmount(String threadId, long lastCommentId);
 }
